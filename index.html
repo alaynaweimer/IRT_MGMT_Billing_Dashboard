@@ -506,19 +506,14 @@
         // ── Secondary Billing ────────────────────────────────────────────────────
         async function loadSecondaryStats() {
             const raw = await fetchSheetData(SHEET_URLS.secondary);
+            if (raw.length === 0) return;
 
-            // Sheet structure: Row1=title, Row2=headers, Row3+=data
-            // gviz returns Row1 as CSV header (garbled title text), Row2 becomes first data row
-            // We re-map using the first data row as real headers
-            if (raw.length < 2) return;
-
-            const realHeaders = Object.values(raw[0]);
-            const rows = raw.slice(1).map(r => {
-                const vals = Object.values(r);
-                const obj  = {};
-                realHeaders.forEach((h,i) => obj[(h||'').trim()] = (vals[i]||'').toString().trim());
-                return obj;
-            }).filter(r => r.ClaimNumber && r.ClaimNumber !== 'ClaimNumber');
+            // Sheet has headers in row 1, data in row 2+
+            // gviz returns headers as keys directly — just filter out blank/header rows
+            const rows = raw.filter(r => {
+                const cn = String(r.ClaimNumber || '').trim();
+                return cn && cn !== 'ClaimNumber' && cn !== 'SECONDARY BILLING CHECK | Compares Primary Payment to DMAP Rate | Auto-refreshed';
+            });
 
             const billOHP  = rows.filter(r => r.Action === 'BILL OHP');
             const checkSec = rows.filter(r => r.Action === 'Check Secondary');
@@ -547,19 +542,14 @@
         // ── Action Required ──────────────────────────────────────────────────────
         async function loadActionStats() {
             const raw = await fetchSheetData(SHEET_URLS.actions);
+            if (raw.length === 0) return;
 
-            // Sheet structure: Row1=title, Row2=headers, Row3+=data
-            // gviz returns Row1 as header, Row2 as first data row (real headers)
-            // Re-map using first data row as real headers
-            if (raw.length < 2) return;
-
-            const realHeaders = Object.values(raw[0]);
-            const rows = raw.slice(1).map(r => {
-                const vals = Object.values(r);
-                const obj  = {};
-                realHeaders.forEach((h,i) => obj[(h||'').trim()] = (vals[i]||'').toString().trim());
-                return obj;
-            }).filter(r => r['Claim ID'] && r['Claim ID'] !== 'Claim ID');
+            // Sheet has headers in row 1, data in row 2+
+            // gviz returns headers as keys directly
+            const rows = raw.filter(r => {
+                const id = String(r['Claim ID'] || '').trim();
+                return id && id !== 'Claim ID' && id !== 'ACTION REQUIRED - BILLING FOLLOW-UP | Syncs to Notion';
+            });
 
             const open   = rows.filter(r => (r.Completed||'').trim() === 'No');
             const high   = open.filter(r => r.Priority === 'High');
