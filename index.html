@@ -30,8 +30,7 @@
         .login-box button {
             width: 100%; padding: 14px;
             background: linear-gradient(135deg, #8b5cf6, #6366f1);
-            border: none; border-radius: 8px; color: #fff; font-size: 16px;
-            font-weight: 600; cursor: pointer;
+            border: none; border-radius: 8px; color: #fff; font-size: 16px; font-weight: 600; cursor: pointer;
         }
         .login-error { color: #ef4444; font-size: 14px; margin-top: 12px; display: none; }
 
@@ -49,23 +48,16 @@
         }
         .header-left p { color: #64748b; font-size: 14px; margin-top: 4px; }
         .header-right { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
-
-        .btn {
-            padding: 10px 16px; background: #12121a; border: 1px solid #2d2d3d;
-            border-radius: 8px; color: #94a3b8; font-size: 13px; cursor: pointer;
-        }
+        .btn { padding: 10px 16px; background: #12121a; border: 1px solid #2d2d3d; border-radius: 8px; color: #94a3b8; font-size: 13px; cursor: pointer; }
         .btn:hover { border-color: #8b5cf6; color: #8b5cf6; }
         .btn.logout:hover { border-color: #ef4444; color: #ef4444; }
         .last-updated { font-size: 12px; color: #4b5563; }
 
-        .exec-cards {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 16px; margin-bottom: 24px;
-        }
+        .exec-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; margin-bottom: 24px; }
         .exec-card { background: #12121a; border: 1px solid #1e1e2e; border-radius: 12px; padding: 20px; }
         .exec-card .label { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
-        .exec-card .value { font-size: 28px; font-weight: 700; font-family: monospace; }
-        .exec-card .subtext { font-size: 12px; color: #4b5563; margin-top: 4px; }
+        .exec-card .value { font-size: 26px; font-weight: 700; font-family: monospace; }
+        .exec-card .subtext { font-size: 11px; color: #4b5563; margin-top: 4px; }
         .exec-card.red    { border-color: rgba(239,68,68,0.3);  } .exec-card.red .value    { color: #ef4444; }
         .exec-card.green  { border-color: rgba(16,185,129,0.3); } .exec-card.green .value  { color: #10b981; }
         .exec-card.yellow { border-color: rgba(245,158,11,0.3); } .exec-card.yellow .value { color: #f59e0b; }
@@ -74,10 +66,7 @@
         .exec-card.orange { border-color: rgba(249,115,22,0.3); } .exec-card.orange .value { color: #f97316; }
         .exec-card.teal   { border-color: rgba(20,184,166,0.3); } .exec-card.teal .value   { color: #14b8a6; }
 
-        .stats-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 20px; margin-bottom: 24px;
-        }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-bottom: 24px; }
         .stat-tile { background: #12121a; border: 1px solid #1e1e2e; border-radius: 12px; overflow: hidden; }
         .stat-tile-header { padding: 14px 18px; border-bottom: 1px solid #1e1e2e; background: #0a0a0f; font-size: 14px; font-weight: 600; }
         .stat-tile-content { padding: 20px; }
@@ -88,7 +77,6 @@
         .big-number.orange { color: #f97316; } .big-number.teal   { color: #14b8a6; }
 
         .stat-detail { font-size: 13px; color: #64748b; margin-bottom: 16px; }
-
         .stat-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #1e1e2e; }
         .stat-row:last-child { border-bottom: none; }
         .stat-row .label { font-size: 13px; color: #94a3b8; }
@@ -96,6 +84,7 @@
         .stat-row .value.red    { color: #ef4444; } .stat-row .value.green  { color: #10b981; }
         .stat-row .value.yellow { color: #f59e0b; } .stat-row .value.orange { color: #f97316; }
         .stat-row .value.teal   { color: #14b8a6; } .stat-row .value.blue   { color: #3b82f6; }
+        .stat-row .value.purple { color: #8b5cf6; }
 
         .aging-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; }
         .aging-bucket { text-align: center; padding: 12px 8px; background: #0a0a0f; border-radius: 8px; border: 1px solid #1e1e2e; }
@@ -115,25 +104,34 @@
         .action-item .task  { color: #94a3b8; flex: 1; }
         .action-item .count { font-weight: 600; font-family: monospace; color: #e2e8f0; }
 
+        .metric-bar { margin: 8px 0; }
+        .metric-bar-label { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 12px; }
+        .metric-bar-label span:first-child { color: #94a3b8; }
+        .metric-bar-label span:last-child  { font-weight: 600; font-family: monospace; }
+        .metric-bar-track { background: #1e1e2e; border-radius: 4px; height: 6px; }
+        .metric-bar-fill  { height: 100%; border-radius: 4px; transition: width 0.5s; }
+        .metric-bar-fill.green  { background: #10b981; }
+        .metric-bar-fill.yellow { background: #f59e0b; }
+        .metric-bar-fill.red    { background: #ef4444; }
+
         .progress-wrap { margin-bottom: 16px; }
         .progress-label { display: flex; justify-content: space-between; margin-bottom: 6px; }
         .progress-label span:first-child { font-size: 12px; color: #94a3b8; }
         .progress-label span:last-child  { font-size: 13px; font-weight: 600; color: #10b981; }
-        .progress-bar-bg { background: #1e1e2e; border-radius: 4px; height: 8px; overflow: hidden; }
-        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #10b981, #059669); width: 0%; transition: width 0.6s ease; border-radius: 4px; }
+        .progress-bar-bg   { background: #1e1e2e; border-radius: 4px; height: 8px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: linear-gradient(90deg,#10b981,#059669); width: 0%; transition: width 0.6s ease; border-radius: 4px; }
+
+        .snapshot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+        .snapshot-cell { background: #0a0a0f; border-radius: 8px; padding: 10px; text-align: center; border: 1px solid #1e1e2e; }
+        .snapshot-cell .month { font-size: 10px; color: #4b5563; margin-bottom: 4px; }
+        .snapshot-cell .val   { font-size: 14px; font-weight: 700; font-family: monospace; color: #e2e8f0; }
 
         .footer { text-align: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid #1e1e2e; color: #4b5563; font-size: 12px; }
-
-        .loading-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(10,10,15,0.95); display: flex; flex-direction: column;
-            align-items: center; justify-content: center; z-index: 100;
-        }
+        .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(10,10,15,0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; }
         .loading-overlay.hidden { display: none; }
         .spinner { width: 48px; height: 48px; border: 3px solid #1e1e2e; border-top-color: #8b5cf6; border-radius: 50%; animation: spin 1s linear infinite; }
         .loading-text { margin-top: 16px; color: #64748b; font-size: 14px; }
         @keyframes spin { to { transform: rotate(360deg); } }
-
         .error-msg { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; padding: 16px; margin-bottom: 20px; color: #ef4444; font-size: 13px; display: none; }
     </style>
 </head>
@@ -169,7 +167,7 @@
 
         <div class="error-msg" id="errorMsg"></div>
 
-        <!-- EXEC SUMMARY CARDS -->
+        <!-- EXEC CARDS -->
         <div class="exec-cards">
             <div class="exec-card blue">
                 <div class="label">Active Claims</div>
@@ -206,6 +204,11 @@
                 <div class="value" id="execOHPRecovery">-</div>
                 <div class="subtext" id="execOHPCount">Loading...</div>
             </div>
+            <div class="exec-card green">
+                <div class="label">Task Completion</div>
+                <div class="value" id="execTaskCompletion">-</div>
+                <div class="subtext" id="execTaskSub">Loading...</div>
+            </div>
         </div>
 
         <!-- MAIN TILES -->
@@ -222,16 +225,17 @@
                     <div class="stat-row"><span class="label">Processing</span><span class="value yellow" id="claimsProcessing">0</span></div>
                     <div class="stat-row"><span class="label">Acknowledged</span><span class="value yellow" id="claimsAcknowledged">0</span></div>
                     <div class="stat-row"><span class="label">Submitted</span><span class="value" id="claimsSubmitted">0</span></div>
-                    <div class="stat-row"><span class="label">$ Outstanding (active)</span><span class="value red" id="claimsOutstanding">$0</span></div>
-                    <div class="stat-row"><span class="label">Unreviewed Claims</span><span class="value orange" id="claimsUnreviewed">0</span></div>
+                    <div class="stat-row"><span class="label">$ Outstanding</span><span class="value red" id="claimsOutstanding">$0</span></div>
+                    <div class="stat-row"><span class="label">Denial Rate %</span><span class="value orange" id="claimsDenialRate">0%</span></div>
+                    <div class="stat-row"><span class="label">Unreviewed</span><span class="value orange" id="claimsUnreviewed">0</span></div>
                 </div>
             </div>
 
             <!-- A/R Aging -->
             <div class="stat-tile">
-                <div class="stat-tile-header">⏱ A/R Aging (Active Claims)</div>
+                <div class="stat-tile-header">⏱ A/R Aging</div>
                 <div class="stat-tile-content">
-                    <div class="stat-detail">Age buckets based on claim date</div>
+                    <div class="stat-detail">Age buckets — active claims only</div>
                     <div class="aging-grid">
                         <div class="aging-bucket yellow">
                             <div class="range">31–60 days</div>
@@ -264,6 +268,7 @@
                     <div class="stat-detail">Collected — last 3 months</div>
                     <div class="stat-row"><span class="label">Records in window</span><span class="value" id="paymentsCount">0</span></div>
                     <div class="stat-row"><span class="label">All-time records</span><span class="value" id="paymentsCountAll">0</span></div>
+                    <div class="stat-row"><span class="label">Secondary recovery rate</span><span class="value teal" id="secRecoveryRate">0%</span></div>
                     <div style="margin-top:16px;">
                         <div class="stat-detail" style="margin-bottom:8px;">Top Payers by $ (last 3 mo)</div>
                         <div class="payer-grid" id="topPayers"></div>
@@ -282,10 +287,64 @@
                     <div class="stat-row"><span class="label">Paid Invoices</span><span class="value green" id="invoicesPaid">0</span></div>
                     <div class="stat-row"><span class="label">Total Invoices</span><span class="value" id="invoicesTotal">0</span></div>
                     <div class="stat-row"><span class="label">Total $ Invoiced</span><span class="value" id="invoicesTotalAmt">$0</span></div>
+                    <div class="stat-row"><span class="label">Collection Rate</span><span class="value green" id="invoiceCollectionRate">0%</span></div>
                 </div>
             </div>
 
-            <!-- Secondary Billing / OHP -->
+            <!-- Invoicing Timeliness -->
+            <div class="stat-tile">
+                <div class="stat-tile-header">⚡ Invoicing Timeliness</div>
+                <div class="stat-tile-content">
+                    <div class="big-number green" id="invoicedSameDay">0%</div>
+                    <div class="stat-detail">Invoiced same day as service</div>
+                    <div style="margin-top:8px;">
+                        <div class="metric-bar">
+                            <div class="metric-bar-label">
+                                <span>Within 24 hours</span>
+                                <span id="invoiced24h" style="color:#10b981;">0%</span>
+                            </div>
+                            <div class="metric-bar-track"><div class="metric-bar-fill green" id="invoiced24hBar" style="width:0%"></div></div>
+                        </div>
+                        <div class="metric-bar" style="margin-top:10px;">
+                            <div class="metric-bar-label">
+                                <span>Within 48 hours</span>
+                                <span id="invoiced48h" style="color:#10b981;">0%</span>
+                            </div>
+                            <div class="metric-bar-track"><div class="metric-bar-fill green" id="invoiced48hBar" style="width:0%"></div></div>
+                        </div>
+                        <div class="metric-bar" style="margin-top:10px;">
+                            <div class="metric-bar-label">
+                                <span>Within 7 days</span>
+                                <span id="invoiced7d" style="color:#f59e0b;">0%</span>
+                            </div>
+                            <div class="metric-bar-track"><div class="metric-bar-fill yellow" id="invoiced7dBar" style="width:0%"></div></div>
+                        </div>
+                        <div class="metric-bar" style="margin-top:10px;">
+                            <div class="metric-bar-label">
+                                <span>7+ days (late)</span>
+                                <span id="invoicedLate" style="color:#ef4444;">0%</span>
+                            </div>
+                            <div class="metric-bar-track"><div class="metric-bar-fill red" id="invoicedLateBar" style="width:0%"></div></div>
+                        </div>
+                    </div>
+                    <div style="margin-top:16px;">
+                        <div class="stat-row"><span class="label">Avg days service → invoice</span><span class="value" id="avgDaysToInvoice">0</span></div>
+                        <div class="stat-row"><span class="label">Total invoices analyzed</span><span class="value" id="timelinessTotal">0</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Denial Rate by Payer -->
+            <div class="stat-tile">
+                <div class="stat-tile-header">❌ Denial Rate by Payer</div>
+                <div class="stat-tile-content">
+                    <div class="big-number red" id="overallDenialRate">0%</div>
+                    <div class="stat-detail">Overall denial rate (denied / total claims)</div>
+                    <div style="margin-top:8px;" id="denialRateByPayer"></div>
+                </div>
+            </div>
+
+            <!-- Secondary Billing Stats -->
             <div class="stat-tile">
                 <div class="stat-tile-header">📑 Secondary Billing (OHP)</div>
                 <div class="stat-tile-content">
@@ -302,36 +361,27 @@
                 </div>
             </div>
 
-            <!-- Action Required — from Notion_Status sheet -->
+            <!-- Action Required / Notion Tasks -->
             <div class="stat-tile">
                 <div class="stat-tile-header">🚨 Action Required</div>
                 <div class="stat-tile-content">
                     <div class="big-number red" id="actionTotal">0</div>
                     <div class="stat-detail">Total billing tasks in Notion</div>
-
                     <div class="progress-wrap">
-                        <div class="progress-label">
-                            <span>Completion Rate</span>
-                            <span id="actionCompletionRate">0%</span>
-                        </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" id="actionProgressBar"></div>
-                        </div>
+                        <div class="progress-label"><span>Completion Rate</span><span id="actionCompletionRate">0%</span></div>
+                        <div class="progress-bar-bg"><div class="progress-bar-fill" id="actionProgressBar"></div></div>
                     </div>
-
                     <div class="stat-row"><span class="label">🔴 To Do</span><span class="value red" id="actionToDo">0</span></div>
                     <div class="stat-row"><span class="label">🔵 In Progress</span><span class="value blue" id="actionInProgress">0</span></div>
                     <div class="stat-row"><span class="label">🟡 Needs Review</span><span class="value yellow" id="actionNeedsReview">0</span></div>
                     <div class="stat-row"><span class="label">✅ Done</span><span class="value green" id="actionDone">0</span></div>
-
-                    <div style="margin-top:16px; padding-top:12px; border-top:1px solid #1e1e2e;">
+                    <div style="margin-top:12px; padding-top:12px; border-top:1px solid #1e1e2e;">
                         <div class="stat-row"><span class="label">🔥 High Priority Remaining</span><span class="value red" id="actionHighRemaining">0</span></div>
                         <div class="stat-row"><span class="label">$ at Stake (open)</span><span class="value teal" id="actionStakeOpen">$0</span></div>
                         <div class="stat-row"><span class="label">$ at Stake (done)</span><span class="value green" id="actionStakeDone">$0</span></div>
                     </div>
-
-                    <div style="margin-top:16px;">
-                        <div class="stat-detail" style="margin-bottom:8px;">By Task Type (open only)</div>
+                    <div style="margin-top:12px;">
+                        <div class="stat-detail" style="margin-bottom:8px;">By Task Type (open)</div>
                         <div id="actionByType"></div>
                     </div>
                 </div>
@@ -344,7 +394,7 @@
                     <div style="text-align:center;padding:40px 20px;color:#4b5563;">
                         <div style="font-size:32px;margin-bottom:12px;">🔐</div>
                         <p style="font-size:13px;">Auth tracking coming soon.</p>
-                        <p style="font-size:11px;margin-top:8px;">Will show: expiring auths, units authorized vs used, clients needing new auth requests.</p>
+                        <p style="font-size:11px;margin-top:8px;">Will show: expiring in 30/60/90 days, units authorized vs used, auth compliance rate, clients needing renewal.</p>
                     </div>
                 </div>
             </div>
@@ -368,10 +418,8 @@
             notionStatus: `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Notion_Status`
         };
 
-        // ── CSV parser ────────────────────────────────────────────────────────────
         function parseCSV(csv) {
-            const lines = [];
-            let cur = '', inQ = false;
+            const lines = []; let cur = '', inQ = false;
             for (let i = 0; i < csv.length; i++) {
                 const c = csv[i];
                 if (c === '"') { inQ = !inQ; cur += c; }
@@ -382,13 +430,11 @@
             if (lines.length === 0) return [];
             const headers = parseCSVLine(lines[0]);
             return lines.slice(1).map(l => {
-                const vals = parseCSVLine(l);
-                const row = {};
-                headers.forEach((h, i) => row[h.trim()] = (vals[i] || '').trim().replace(/^"|"$/g, ''));
+                const vals = parseCSVLine(l); const row = {};
+                headers.forEach((h,i) => row[h.trim()] = (vals[i]||'').trim().replace(/^"|"$/g,''));
                 return row;
             });
         }
-
         function parseCSVLine(line) {
             const res = []; let cur = '', inQ = false;
             for (let i = 0; i < line.length; i++) {
@@ -398,26 +444,24 @@
                 else cur += c;
             }
             res.push(cur);
-            return res.map(s => s.trim().replace(/^"|"$/g, ''));
+            return res.map(s => s.trim().replace(/^"|"$/g,''));
         }
-
         async function fetchSheetData(url) {
             const res = await fetch(url);
             if (!res.ok) throw new Error('Fetch failed: ' + url);
             return parseCSV(await res.text());
         }
 
-        // ── Helpers ───────────────────────────────────────────────────────────────
-        const fmt$ = val => '$' + (parseFloat(String(val).replace(/[,$]/g,''))||0)
-                            .toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
-        const num  = val => parseFloat(String(val).replace(/[,$]/g,'')) || 0;
-        const set  = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+        const fmt$ = v => '$'+(parseFloat(String(v).replace(/[,$]/g,''))||0).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
+        const num  = v => parseFloat(String(v).replace(/[,$]/g,''))||0;
+        const pct  = (n,d) => d>0 ? Math.round((n/d)*100)+'%' : '0%';
+        const set  = (id,val) => { const el=document.getElementById(id); if(el) el.textContent=val; };
+        const setBar = (id, pctVal) => { const el=document.getElementById(id); if(el) el.style.width=Math.min(pctVal,100)+'%'; };
 
-        // ── Claims ────────────────────────────────────────────────────────────────
+        // ── Claims ───────────────────────────────────────────────────────────────
         async function loadClaimsStats() {
             const data = await fetchSheetData(SHEET_URLS.claims);
             const rows = data.filter(r => r.ClaimNumber && r.ClaimNumber !== 'ClaimNumber');
-
             const active      = rows.filter(r => !['paid','deductible','canceled'].includes((r.Status||'').toLowerCase()));
             const denied      = rows.filter(r => r.Status === 'Denied');
             const rejected    = rows.filter(r => r.Status === 'Rejected');
@@ -425,23 +469,21 @@
             const acknowledged= rows.filter(r => r.Status === 'Acknowledged');
             const submitted   = rows.filter(r => r.Status === 'Submitted');
             const unreviewed  = rows.filter(r => (r.ReviewStatus||'') === 'NotReviewed');
-
-            const outstanding = active.reduce((s,r) => s + num(r.TotalBilled), 0);
-            const deniedAmt   = denied.reduce((s,r) => s + num(r.TotalBilled), 0);
-            const totalBilled = rows.reduce((s,r)  => s + num(r.TotalBilled), 0);
-
             const ag3160 = rows.filter(r => r.AgingBucket === '31-60');
             const ag6190 = rows.filter(r => r.AgingBucket === '61-90');
             const ag90   = rows.filter(r => r.AgingBucket === '90+');
+            const outstanding = active.reduce((s,r)=>s+num(r.TotalBilled),0);
+            const deniedAmt   = denied.reduce((s,r)=>s+num(r.TotalBilled),0);
+            const totalBilled = rows.reduce((s,r)=>s+num(r.TotalBilled),0);
+            const denialRate  = rows.length > 0 ? Math.round((denied.length/rows.length)*100) : 0;
 
             set('execActiveClaims', active.length.toLocaleString());
-            set('execActiveAmt',    fmt$(outstanding) + ' outstanding');
+            set('execActiveAmt',    fmt$(outstanding)+' outstanding');
             set('execDenied',       denied.length);
             set('execDeniedAmt',    fmt$(deniedAmt));
             set('execTotalClaims',  rows.length.toLocaleString());
-            set('execTotalBilled',  fmt$(totalBilled) + ' billed');
+            set('execTotalBilled',  fmt$(totalBilled)+' billed');
             set('exec90Plus',       ag90.length);
-
             set('claimsActive',       active.length);
             set('claimsDenied',       denied.length);
             set('claimsRejected',     rejected.length);
@@ -449,8 +491,9 @@
             set('claimsAcknowledged', acknowledged.length);
             set('claimsSubmitted',    submitted.length);
             set('claimsOutstanding',  fmt$(outstanding));
+            set('claimsDenialRate',   denialRate+'%');
             set('claimsUnreviewed',   unreviewed.length);
-
+            set('overallDenialRate',  denialRate+'%');
             set('aging3160',    ag3160.length);
             set('aging3160Amt', fmt$(ag3160.reduce((s,r)=>s+num(r.TotalBilled),0)));
             set('aging6190',    ag6190.length);
@@ -458,217 +501,241 @@
             set('aging90',      ag90.length);
             set('aging90Amt',   fmt$(ag90.reduce((s,r)=>s+num(r.TotalBilled),0)));
 
+            // Payer breakdown
             const pc = {};
             active.forEach(r => {
-                const p = r.PayerName || 'Unknown';
-                if (!pc[p]) pc[p] = { count:0, amount:0 };
-                pc[p].count++;
-                pc[p].amount += num(r.TotalBilled);
+                const p = r.PayerName||'Unknown';
+                if (!pc[p]) pc[p]={count:0,amount:0};
+                pc[p].count++; pc[p].amount+=num(r.TotalBilled);
             });
             document.getElementById('payerBreakdown').innerHTML =
-                Object.entries(pc).sort((a,b)=>b[1].count-a[1].count).slice(0,10)
-                .map(([p,d]) => `<div class="stat-row">
-                    <span class="label">${p.substring(0,28)}${p.length>28?'…':''}</span>
+                Object.entries(pc).sort((a,b)=>b[1].count-a[1].count).slice(0,8)
+                .map(([p,d])=>`<div class="stat-row">
+                    <span class="label">${p.substring(0,26)}${p.length>26?'…':''}</span>
                     <span class="value">${d.count} <span style="color:#4b5563;font-size:11px;">(${fmt$(d.amount)})</span></span>
                 </div>`).join('') || '<p style="color:#4b5563">No active claims</p>';
+
+            // Denial rate by payer
+            const dp = {};
+            rows.forEach(r => {
+                const p = r.PayerName||'Unknown';
+                if (!dp[p]) dp[p]={total:0,denied:0};
+                dp[p].total++;
+                if (r.Status==='Denied') dp[p].denied++;
+            });
+            document.getElementById('denialRateByPayer').innerHTML =
+                Object.entries(dp).filter(([,d])=>d.denied>0)
+                .sort((a,b)=>(b[1].denied/b[1].total)-(a[1].denied/a[1].total)).slice(0,8)
+                .map(([p,d])=>{
+                    const rate = Math.round((d.denied/d.total)*100);
+                    const color = rate>10?'#ef4444':rate>5?'#f59e0b':'#10b981';
+                    return `<div class="metric-bar" style="margin-bottom:10px;">
+                        <div class="metric-bar-label">
+                            <span>${p.substring(0,24)}${p.length>24?'…':''}</span>
+                            <span style="color:${color}">${rate}% (${d.denied}/${d.total})</span>
+                        </div>
+                        <div class="metric-bar-track">
+                            <div class="metric-bar-fill ${rate>10?'red':rate>5?'yellow':'green'}" style="width:${Math.min(rate*3,100)}%"></div>
+                        </div>
+                    </div>`;
+                }).join('') || '<p style="color:#10b981;font-size:12px;">No denials ✅</p>';
         }
 
-        // ── Payments (3-month rolling) ────────────────────────────────────────────
+        // ── Payments ─────────────────────────────────────────────────────────────
         async function loadPaymentsStats() {
             const data = await fetchSheetData(SHEET_URLS.payments);
             const rows = data.filter(r => r.Amount && r.Amount !== 'Amount');
-
-            const cutoff = new Date();
-            cutoff.setMonth(cutoff.getMonth() - 3);
-
-            const recent = rows.filter(r => {
-                const d = new Date(r.DateCreated);
-                return !isNaN(d) && d >= cutoff;
-            });
-
-            const total3mo = recent.reduce((s,r) => s + num(r.Amount), 0);
+            const cutoff = new Date(); cutoff.setMonth(cutoff.getMonth()-3);
+            const recent = rows.filter(r => { const d=new Date(r.DateCreated); return !isNaN(d)&&d>=cutoff; });
+            const total3mo = recent.reduce((s,r)=>s+num(r.Amount),0);
 
             set('execCollected',    fmt$(total3mo));
             set('execPaymentCount', `Last 3 mo (${recent.length} records)`);
             set('paymentsTotal',    fmt$(total3mo));
-            set('paymentsCount',    recent.length + ' records in window');
-            set('paymentsCountAll', rows.length + ' total all-time');
+            set('paymentsCount',    recent.length+' in window');
+            set('paymentsCountAll', rows.length+' all-time');
 
             const pa = {};
-            recent.forEach(r => {
-                const p = r.PayerName || r.InvoiceNumber || 'Unknown';
-                pa[p] = (pa[p]||0) + num(r.Amount);
-            });
+            recent.forEach(r => { const p=r.PayerName||'Unknown'; pa[p]=(pa[p]||0)+num(r.Amount); });
             document.getElementById('topPayers').innerHTML =
                 Object.entries(pa).sort((a,b)=>b[1]-a[1]).slice(0,8)
-                .map(([p,amt]) => `<div class="payer-item">
-                    <span class="name">${p.length>22?p.substring(0,22)+'…':p}</span>
+                .map(([p,amt])=>`<div class="payer-item">
+                    <span class="name">${p.length>20?p.substring(0,20)+'…':p}</span>
                     <span class="val">${fmt$(amt)}</span>
                 </div>`).join('');
         }
 
-        // ── Invoices ──────────────────────────────────────────────────────────────
+        // ── Invoices ─────────────────────────────────────────────────────────────
         async function loadInvoicesStats() {
             const data = await fetchSheetData(SHEET_URLS.invoices);
             const rows = data.filter(r => r.Number && r.Number !== 'Number');
+            const unpaid  = rows.filter(r => r.Status==='Unpaid');
+            const pastDue = rows.filter(r => r.Status==='PastDue');
+            const paid    = rows.filter(r => r.Status==='Paid');
+            const amountDue     = unpaid.reduce((s,r)=>s+num(r.AmountDue),0);
+            const pastDueAmt    = pastDue.reduce((s,r)=>s+num(r.AmountDue),0);
+            const totalInvoiced = rows.reduce((s,r)=>s+num(r.Total),0);
+            const totalPaid     = rows.reduce((s,r)=>s+num(r.TotalPaid),0);
+            const collectionRate = totalInvoiced>0 ? Math.round((totalPaid/totalInvoiced)*100) : 0;
 
-            const unpaid  = rows.filter(r => r.Status === 'Unpaid');
-            const pastDue = rows.filter(r => r.Status === 'PastDue');
-            const paid    = rows.filter(r => r.Status === 'Paid');
+            set('execUnpaidInv',  unpaid.length+pastDue.length);
+            set('execUnpaidAmt',  fmt$(amountDue+pastDueAmt)+' due');
+            set('invoicesUnpaid',       unpaid.length);
+            set('invoicesAmountDue',    fmt$(amountDue));
+            set('invoicesPastDue',      pastDue.length);
+            set('invoicesPaid',         paid.length);
+            set('invoicesTotal',        rows.length);
+            set('invoicesTotalAmt',     fmt$(totalInvoiced));
+            set('invoiceCollectionRate',collectionRate+'%');
 
-            const amountDue     = unpaid.reduce((s,r)  => s + num(r.AmountDue), 0);
-            const pastDueAmt    = pastDue.reduce((s,r) => s + num(r.AmountDue), 0);
-            const totalInvoiced = rows.reduce((s,r)    => s + num(r.Total), 0);
+            // Invoicing timeliness — compare Date (service/invoice date) to DateCreated
+            const timeliness = rows.filter(r => r.Date && r.DateCreated).map(r => {
+                const svcDate     = new Date(r.Date);
+                const invoiceDate = new Date(r.DateCreated);
+                if (isNaN(svcDate)||isNaN(invoiceDate)) return null;
+                return Math.floor((invoiceDate - svcDate)/(1000*60*60*24));
+            }).filter(d => d !== null && d >= 0 && d < 365);
 
-            set('execUnpaidInv',  unpaid.length + pastDue.length);
-            set('execUnpaidAmt',  fmt$(amountDue + pastDueAmt) + ' due');
+            if (timeliness.length > 0) {
+                const same   = timeliness.filter(d=>d===0).length;
+                const within24 = timeliness.filter(d=>d<=1).length;
+                const within48 = timeliness.filter(d=>d<=2).length;
+                const within7d = timeliness.filter(d=>d<=7).length;
+                const late     = timeliness.filter(d=>d>7).length;
+                const avgDays  = Math.round(timeliness.reduce((s,d)=>s+d,0)/timeliness.length);
+                const total    = timeliness.length;
 
-            set('invoicesUnpaid',    unpaid.length);
-            set('invoicesAmountDue', fmt$(amountDue));
-            set('invoicesPastDue',   pastDue.length);
-            set('invoicesPaid',      paid.length);
-            set('invoicesTotal',     rows.length);
-            set('invoicesTotalAmt',  fmt$(totalInvoiced));
+                const p24 = Math.round((within24/total)*100);
+                const p48 = Math.round((within48/total)*100);
+                const p7d = Math.round((within7d/total)*100);
+                const pLate = Math.round((late/total)*100);
+
+                set('invoicedSameDay', Math.round((same/total)*100)+'%');
+                set('invoiced24h',     p24+'%');
+                set('invoiced48h',     p48+'%');
+                set('invoiced7d',      p7d+'%');
+                set('invoicedLate',    pLate+'%');
+                set('avgDaysToInvoice',avgDays+' days');
+                set('timelinessTotal', total+' invoices');
+                setBar('invoiced24hBar', p24);
+                setBar('invoiced48hBar', p48);
+                setBar('invoiced7dBar',  p7d);
+                setBar('invoicedLateBar',pLate);
+            }
         }
 
         // ── Secondary Billing ─────────────────────────────────────────────────────
         async function loadSecondaryStats() {
             const raw = await fetchSheetData(SHEET_URLS.secondary);
-            if (raw.length === 0) return;
-
             const rows = raw.filter(r => {
-                const cn = String(r.ClaimNumber || '').trim();
-                return cn && cn !== 'ClaimNumber' &&
-                       cn !== 'SECONDARY BILLING CHECK | Compares Primary Payment to DMAP Rate | Auto-refreshed';
+                const cn=String(r.ClaimNumber||'').trim();
+                return cn && cn!=='ClaimNumber' && !cn.includes('SECONDARY BILLING');
             });
-
-            const billOHP     = rows.filter(r => r.Action === 'BILL OHP');
-            const checkSec    = rows.filter(r => r.Action === 'Check Secondary');
-            const noAction    = rows.filter(r => r.Action === 'No Action');
-            const recoverable = billOHP.reduce((s,r) => s + num(r['$ to Recover']), 0);
+            const billOHP     = rows.filter(r=>r.Action==='BILL OHP');
+            const checkSec    = rows.filter(r=>r.Action==='Check Secondary');
+            const noAction    = rows.filter(r=>r.Action==='No Action');
+            const recoverable = billOHP.reduce((s,r)=>s+num(r['$ to Recover']),0);
+            const totalBillable = rows.length;
+            const recoveryRate = totalBillable>0 ? Math.round((billOHP.length/totalBillable)*100) : 0;
 
             set('execOHPRecovery',   fmt$(recoverable));
-            set('execOHPCount',      billOHP.length + ' line items');
+            set('execOHPCount',      billOHP.length+' line items');
             set('secBillOHP',        billOHP.length.toLocaleString());
             set('secRecoverable',    fmt$(recoverable));
             set('secCheckSecondary', checkSec.length.toLocaleString());
             set('secNoAction',       noAction.length.toLocaleString());
             set('secTotal',          rows.length.toLocaleString());
+            set('secRecoveryRate',   recoveryRate+'%');
 
             const sc = {};
-            billOHP.forEach(r => { const s = r.Status||'Unknown'; sc[s]=(sc[s]||0)+1; });
+            billOHP.forEach(r=>{ const s=r.Status||'Unknown'; sc[s]=(sc[s]||0)+1; });
             document.getElementById('secStatusBreakdown').innerHTML =
                 Object.entries(sc).sort((a,b)=>b[1]-a[1])
-                .map(([s,c]) => `<div class="stat-row">
+                .map(([s,c])=>`<div class="stat-row">
                     <span class="label">${s}</span>
                     <span class="value">${c.toLocaleString()}</span>
                 </div>`).join('') || '<p style="color:#4b5563">No data</p>';
         }
 
-        // ── Action Required — from Notion_Status sheet ────────────────────────────
+        // ── Notion Tasks ──────────────────────────────────────────────────────────
         async function loadActionStats() {
             try {
                 const raw = await fetchSheetData(SHEET_URLS.notionStatus);
-                if (raw.length === 0) {
-                    set('actionTotal', '—');
-                    document.getElementById('actionByType').innerHTML =
-                        '<p style="color:#4b5563;font-size:12px;">No data — run Sync Notion Status from sheet menu</p>';
-                    return;
-                }
-
-                const tasks = raw.filter(r => r.ClaimId && r.ClaimId !== 'ClaimId');
+                if (raw.length===0) { set('actionTotal','—'); return; }
+                const tasks = raw.filter(r=>r.ClaimId && r.ClaimId!=='ClaimId');
                 const total       = tasks.length;
-                const toDo        = tasks.filter(t => t.Status === 'To Do');
-                const inProgress  = tasks.filter(t => t.Status === 'In Progress');
-                const needsReview = tasks.filter(t => t.Status === 'Needs Review');
-                const done        = tasks.filter(t => t.Status === 'Done');
-                const open        = [...toDo, ...inProgress, ...needsReview];
+                const toDo        = tasks.filter(t=>t.Status==='To Do');
+                const inProgress  = tasks.filter(t=>t.Status==='In Progress');
+                const needsReview = tasks.filter(t=>t.Status==='Needs Review');
+                const done        = tasks.filter(t=>t.Status==='Done');
+                const open        = [...toDo,...inProgress,...needsReview];
+                const completionRate = total>0?Math.round((done.length/total)*100):0;
+                const stakeOpen  = open.reduce((s,t)=>s+num(t.AtStake),0);
+                const stakeDone  = done.reduce((s,t)=>s+num(t.AtStake),0);
+                const highRemain = open.filter(t=>t.Priority==='High').length;
 
-                const completionRate = total > 0 ? Math.round((done.length / total) * 100) : 0;
-                const highRemaining  = open.filter(t => t.Priority === 'High').length;
-                const stakeOpen      = open.reduce((s,t) => s + num(t.AtStake), 0);
-                const stakeDone      = done.reduce((s,t) => s + num(t.AtStake), 0);
-
+                set('execTaskCompletion', completionRate+'%');
+                set('execTaskSub',        done.length+'/'+total+' tasks done');
                 set('actionTotal',         total.toLocaleString());
-                set('actionCompletionRate', completionRate + '%');
-                set('actionToDo',           toDo.length.toLocaleString());
-                set('actionInProgress',     inProgress.length.toLocaleString());
-                set('actionNeedsReview',    needsReview.length.toLocaleString());
-                set('actionDone',           done.length.toLocaleString());
-                set('actionHighRemaining',  highRemaining.toLocaleString());
-                set('actionStakeOpen',      fmt$(stakeOpen));
-                set('actionStakeDone',      fmt$(stakeDone));
+                set('actionCompletionRate',completionRate+'%');
+                set('actionToDo',          toDo.length.toLocaleString());
+                set('actionInProgress',    inProgress.length.toLocaleString());
+                set('actionNeedsReview',   needsReview.length.toLocaleString());
+                set('actionDone',          done.length.toLocaleString());
+                set('actionHighRemaining', highRemain.toLocaleString());
+                set('actionStakeOpen',     fmt$(stakeOpen));
+                set('actionStakeDone',     fmt$(stakeDone));
+                const bar=document.getElementById('actionProgressBar');
+                if(bar) bar.style.width=completionRate+'%';
 
-                const bar = document.getElementById('actionProgressBar');
-                if (bar) bar.style.width = completionRate + '%';
-
-                const tc = {};
-                open.forEach(t => { const type = t.TaskType || 'Unknown'; tc[type] = (tc[type]||0) + 1; });
+                const tc={};
+                open.forEach(t=>{ const type=t.TaskType||'Unknown'; tc[type]=(tc[type]||0)+1; });
                 document.getElementById('actionByType').innerHTML =
-                    Object.entries(tc).sort((a,b) => b[1]-a[1])
-                    .map(([t,c]) => `<div class="action-item">
+                    Object.entries(tc).sort((a,b)=>b[1]-a[1])
+                    .map(([t,c])=>`<div class="action-item">
                         <span class="task">${t}</span>
                         <span class="count">${c.toLocaleString()}</span>
                     </div>`).join('') || '<p style="color:#4b5563">No open actions</p>';
-
-            } catch (err) {
-                console.error('Action stats error:', err);
-                set('actionTotal', '—');
-                document.getElementById('actionByType').innerHTML =
-                    '<p style="color:#4b5563;font-size:12px;">Could not load data</p>';
+            } catch(err) {
+                console.error('Action stats error:',err);
+                set('actionTotal','—');
             }
         }
 
         // ── Load All ──────────────────────────────────────────────────────────────
         async function loadAllData() {
             document.getElementById('loadingOverlay').classList.remove('hidden');
-            document.getElementById('errorMsg').style.display = 'none';
+            document.getElementById('errorMsg').style.display='none';
             try {
-                await Promise.all([
-                    loadClaimsStats(),
-                    loadPaymentsStats(),
-                    loadInvoicesStats(),
-                    loadSecondaryStats(),
-                    loadActionStats()
-                ]);
-                set('lastUpdated', 'Updated: ' + new Date().toLocaleTimeString());
-                set('dataDate',    new Date().toLocaleDateString());
-            } catch (err) {
-                const msg = document.getElementById('errorMsg');
-                msg.style.display = 'block';
-                msg.textContent = 'Error loading data: ' + err.message;
-                console.error(err);
+                await Promise.all([loadClaimsStats(),loadPaymentsStats(),loadInvoicesStats(),loadSecondaryStats(),loadActionStats()]);
+                set('lastUpdated','Updated: '+new Date().toLocaleTimeString());
+                set('dataDate',new Date().toLocaleDateString());
+            } catch(err) {
+                const msg=document.getElementById('errorMsg');
+                msg.style.display='block';
+                msg.textContent='Error loading data: '+err.message;
             }
             document.getElementById('loadingOverlay').classList.add('hidden');
         }
 
-        // ── Login ─────────────────────────────────────────────────────────────────
         function checkPassword() {
-            if (document.getElementById('passwordInput').value === PASSWORD) {
-                document.getElementById('loginContainer').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
-                sessionStorage.setItem('mgmtAuth', 'true');
+            if (document.getElementById('passwordInput').value===PASSWORD) {
+                document.getElementById('loginContainer').style.display='none';
+                document.getElementById('dashboard').style.display='block';
+                sessionStorage.setItem('mgmtAuth','true');
                 loadAllData();
             } else {
-                document.getElementById('loginError').style.display = 'block';
-                document.getElementById('passwordInput').value = '';
+                document.getElementById('loginError').style.display='block';
+                document.getElementById('passwordInput').value='';
             }
         }
-
-        function logout() {
-            sessionStorage.removeItem('mgmtAuth');
-            location.reload();
-        }
-
-        if (sessionStorage.getItem('mgmtAuth') === 'true') {
-            document.getElementById('loginContainer').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
+        function logout() { sessionStorage.removeItem('mgmtAuth'); location.reload(); }
+        if (sessionStorage.getItem('mgmtAuth')==='true') {
+            document.getElementById('loginContainer').style.display='none';
+            document.getElementById('dashboard').style.display='block';
             loadAllData();
         }
-
-        document.getElementById('passwordInput').addEventListener('keypress', e => {
-            if (e.key === 'Enter') checkPassword();
-        });
+        document.getElementById('passwordInput').addEventListener('keypress',e=>{ if(e.key==='Enter') checkPassword(); });
     </script>
 </body>
 </html>
