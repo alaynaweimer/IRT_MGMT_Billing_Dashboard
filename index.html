@@ -7,7 +7,70 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #0a0a0f; color: #e2e8f0; min-height: 100vh; }
+        body { font-family: 'Inter', sans-serif; background: #06060a; color: #e2e8f0; min-height: 100vh; padding: 16px; }
+
+        .frame {
+            border: 2px solid #0ea5e9;
+            border-radius: 20px;
+            overflow: hidden;
+            background: #0a0a0f;
+            box-shadow: 0 0 0 6px rgba(14,165,233,0.12), 0 0 30px rgba(14,165,233,0.15), 0 8px 40px rgba(0,0,0,0.6);
+        }
+        .frame-header {
+            background: linear-gradient(135deg, #12121a 0%, #0a1520 100%);
+            border-bottom: 1px solid #1e1e2e;
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .frame-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .frame-brand .org {
+            font-size: 13px;
+            font-weight: 700;
+            color: #8b5cf6;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .frame-brand .divider {
+            width: 1px;
+            height: 16px;
+            background: #2d2d3d;
+        }
+        .frame-brand .name {
+            font-size: 13px;
+            color: #64748b;
+        }
+        .frame-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .frame-sync {
+            font-size: 11px;
+            color: #4b5563;
+        }
+        .frame-sync span {
+            color: #10b981;
+            font-weight: 600;
+        }
+        .frame-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
 
         .login-container {
             display: flex; align-items: center; justify-content: center;
@@ -147,7 +210,19 @@
         </div>
     </div>
 
-    <div class="dashboard" id="dashboard">
+    <div class="frame" id="frame" style="display:none;">
+        <div class="frame-header">
+            <div class="frame-brand">
+                <span class="org">In Reach Therapy</span>
+                <div class="divider"></div>
+                <span class="name">MGMT Billing Dashboard</span>
+            </div>
+            <div class="frame-meta">
+                <div class="frame-dot"></div>
+                <span class="frame-sync">Last synced: <span id="frameSyncTime">—</span></span>
+            </div>
+        </div>
+        <div class="dashboard" id="dashboard">
         <div class="loading-overlay" id="loadingOverlay">
             <div class="spinner"></div>
             <div class="loading-text">Loading data...</div>
@@ -404,7 +479,8 @@
         <div class="footer">
             Data source: In Reach Billing Google Sheet + Notion | <span id="dataDate"></span>
         </div>
-    </div>
+    </div><!-- end .dashboard -->
+    </div><!-- end .frame -->
 
     <script>
         const SHEET_ID = '11Uf2mb73ym-9VbK42xXJIlsaWy1drIZ-LP-w0r2OZWQ';
@@ -710,6 +786,7 @@
                 await Promise.all([loadClaimsStats(),loadPaymentsStats(),loadInvoicesStats(),loadSecondaryStats(),loadActionStats()]);
                 set('lastUpdated','Updated: '+new Date().toLocaleTimeString());
                 set('dataDate',new Date().toLocaleDateString());
+                set('frameSyncTime', new Date().toLocaleTimeString());
             } catch(err) {
                 const msg=document.getElementById('errorMsg');
                 msg.style.display='block';
@@ -721,6 +798,7 @@
         function checkPassword() {
             if (document.getElementById('passwordInput').value===PASSWORD) {
                 document.getElementById('loginContainer').style.display='none';
+                document.getElementById('frame').style.display='block';
                 document.getElementById('dashboard').style.display='block';
                 sessionStorage.setItem('mgmtAuth','true');
                 loadAllData();
@@ -732,6 +810,7 @@
         function logout() { sessionStorage.removeItem('mgmtAuth'); location.reload(); }
         if (sessionStorage.getItem('mgmtAuth')==='true') {
             document.getElementById('loginContainer').style.display='none';
+            document.getElementById('frame').style.display='block';
             document.getElementById('dashboard').style.display='block';
             loadAllData();
         }
