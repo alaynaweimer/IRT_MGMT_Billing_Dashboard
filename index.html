@@ -147,6 +147,8 @@
         .exec-card.blue .value { color: #3b82f6; }
         .exec-card.orange { border-color: rgba(249, 115, 22, 0.3); }
         .exec-card.orange .value { color: #f97316; }
+        .exec-card.teal { border-color: rgba(20, 184, 166, 0.3); }
+        .exec-card.teal .value { color: #14b8a6; }
 
         .stats-grid {
             display: grid;
@@ -183,6 +185,8 @@
         .big-number.green { color: #10b981; }
         .big-number.yellow { color: #f59e0b; }
         .big-number.blue { color: #3b82f6; }
+        .big-number.orange { color: #f97316; }
+        .big-number.teal { color: #14b8a6; }
 
         .stat-detail { font-size: 13px; color: #64748b; margin-bottom: 16px; }
 
@@ -206,10 +210,12 @@
         .stat-row .value.red { color: #ef4444; }
         .stat-row .value.green { color: #10b981; }
         .stat-row .value.yellow { color: #f59e0b; }
+        .stat-row .value.orange { color: #f97316; }
+        .stat-row .value.teal { color: #14b8a6; }
 
         .aging-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 8px;
             margin-top: 16px;
         }
@@ -226,7 +232,6 @@
         .aging-bucket .count { font-size: 18px; font-weight: 600; font-family: monospace; }
         .aging-bucket .amount { font-size: 11px; color: #64748b; margin-top: 2px; }
 
-        .aging-bucket.green .count { color: #10b981; }
         .aging-bucket.yellow .count { color: #f59e0b; }
         .aging-bucket.orange .count { color: #f97316; }
         .aging-bucket.red .count { color: #ef4444; }
@@ -249,6 +254,31 @@
 
         .payer-item .name { color: #94a3b8; }
         .payer-item .val { color: #e2e8f0; font-weight: 600; }
+
+        .action-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 10px;
+            background: #0a0a0f;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            font-size: 12px;
+        }
+
+        .action-item .task { color: #94a3b8; flex: 1; }
+        .action-item .count { font-weight: 600; font-family: monospace; color: #e2e8f0; }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        .badge.high { background: rgba(239,68,68,0.15); color: #ef4444; }
+        .badge.medium { background: rgba(245,158,11,0.15); color: #f59e0b; }
+        .badge.low { background: rgba(100,116,139,0.15); color: #64748b; }
 
         .footer {
             text-align: center;
@@ -295,12 +325,6 @@
             font-size: 13px;
             display: none;
         }
-
-        .placeholder-content {
-            text-align: center;
-            padding: 20px;
-            color: #4b5563;
-        }
     </style>
 </head>
 <body>
@@ -335,6 +359,7 @@
 
         <div class="error-msg" id="errorMsg"></div>
 
+        <!-- EXEC SUMMARY CARDS -->
         <div class="exec-cards">
             <div class="exec-card blue">
                 <div class="label">Active Claims</div>
@@ -352,7 +377,7 @@
                 <div class="subtext" id="execDeniedAmt">Loading...</div>
             </div>
             <div class="exec-card yellow">
-                <div class="label">Unpaid Invoices</div>
+                <div class="label">Unpaid + Past Due</div>
                 <div class="value" id="execUnpaidInv">-</div>
                 <div class="subtext" id="execUnpaidAmt">Loading...</div>
             </div>
@@ -362,19 +387,26 @@
                 <div class="subtext" id="execTotalBilled">Loading...</div>
             </div>
             <div class="exec-card orange">
-                <div class="label">90+ Days</div>
+                <div class="label">90+ Days A/R</div>
                 <div class="value" id="exec90Plus">-</div>
-                <div class="subtext" id="exec90Amt">Aged A/R</div>
+                <div class="subtext" id="exec90Amt">Aged claims</div>
+            </div>
+            <div class="exec-card teal">
+                <div class="label">OHP to Recover</div>
+                <div class="value" id="execOHPRecovery">-</div>
+                <div class="subtext" id="execOHPCount">Loading...</div>
             </div>
         </div>
 
+        <!-- MAIN TILES -->
         <div class="stats-grid">
+
+            <!-- Claims Stats -->
             <div class="stat-tile">
                 <div class="stat-tile-header">📋 Claims Stats</div>
                 <div class="stat-tile-content">
                     <div class="big-number blue" id="claimsActive">0</div>
                     <div class="stat-detail">Active claims (not Paid/Deductible)</div>
-                    
                     <div class="stat-row">
                         <span class="label">Denied</span>
                         <span class="value red" id="claimsDenied">0</span>
@@ -392,58 +424,63 @@
                         <span class="value yellow" id="claimsAcknowledged">0</span>
                     </div>
                     <div class="stat-row">
-                        <span class="label">Total $ Outstanding</span>
-                        <span class="value" id="claimsOutstanding">$0</span>
+                        <span class="label">Submitted</span>
+                        <span class="value" id="claimsSubmitted">0</span>
                     </div>
-
-                    <div class="aging-grid">
-                        <div class="aging-bucket green">
-                            <div class="range">0-30</div>
-                            <div class="count" id="aging030">0</div>
-                            <div class="amount" id="aging030Amt">$0</div>
-                        </div>
-                        <div class="aging-bucket yellow">
-                            <div class="range">31-60</div>
-                            <div class="count" id="aging3160">0</div>
-                            <div class="amount" id="aging3160Amt">$0</div>
-                        </div>
-                        <div class="aging-bucket orange">
-                            <div class="range">61-90</div>
-                            <div class="count" id="aging6190">0</div>
-                            <div class="amount" id="aging6190Amt">$0</div>
-                        </div>
-                        <div class="aging-bucket red">
-                            <div class="range">90+</div>
-                            <div class="count" id="aging90">0</div>
-                            <div class="amount" id="aging90Amt">$0</div>
-                        </div>
+                    <div class="stat-row">
+                        <span class="label">$ Outstanding (active)</span>
+                        <span class="value red" id="claimsOutstanding">$0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="label">Unreviewed Claims</span>
+                        <span class="value orange" id="claimsUnreviewed">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="label">Has Secondary Ins.</span>
+                        <span class="value teal" id="claimsHasSecondary">0</span>
                     </div>
                 </div>
             </div>
 
+            <!-- A/R Aging -->
+            <div class="stat-tile">
+                <div class="stat-tile-header">⏱ A/R Aging (Active Claims)</div>
+                <div class="stat-tile-content">
+                    <div class="stat-detail">Age buckets based on claim date</div>
+                    <div class="aging-grid">
+                        <div class="aging-bucket yellow">
+                            <div class="range">31–60 days</div>
+                            <div class="count" id="aging3160">0</div>
+                            <div class="amount" id="aging3160Amt">$0</div>
+                        </div>
+                        <div class="aging-bucket orange">
+                            <div class="range">61–90 days</div>
+                            <div class="count" id="aging6190">0</div>
+                            <div class="amount" id="aging6190Amt">$0</div>
+                        </div>
+                        <div class="aging-bucket red">
+                            <div class="range">90+ days</div>
+                            <div class="count" id="aging90">0</div>
+                            <div class="amount" id="aging90Amt">$0</div>
+                        </div>
+                    </div>
+                    <div style="margin-top:20px;">
+                        <div class="stat-detail" style="margin-bottom:8px;">Active Claims by Payer</div>
+                        <div id="payerBreakdown"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payments Stats -->
             <div class="stat-tile">
                 <div class="stat-tile-header">💳 Payments Stats</div>
                 <div class="stat-tile-content">
                     <div class="big-number green" id="paymentsTotal">$0</div>
-                    <div class="stat-detail">Total collected (Nov 2025 - Present)</div>
-                    
-                    <div class="stat-row">
-                        <span class="label">ACH Payments</span>
-                        <span class="value green" id="paymentsACH">0</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="label">Check Payments</span>
-                        <span class="value green" id="paymentsCHK">0</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="label">$0 Payments (NON)</span>
-                        <span class="value red" id="paymentsNON">0</span>
-                    </div>
+                    <div class="stat-detail">Total collected (all time)</div>
                     <div class="stat-row">
                         <span class="label">Total Payment Records</span>
                         <span class="value" id="paymentsCount">0</span>
                     </div>
-
                     <div style="margin-top: 16px;">
                         <div class="stat-detail" style="margin-bottom: 8px;">Top Payers by $ Collected</div>
                         <div class="payer-grid" id="topPayers"></div>
@@ -451,15 +488,19 @@
                 </div>
             </div>
 
+            <!-- Invoice Stats -->
             <div class="stat-tile">
                 <div class="stat-tile-header">📄 Invoice Stats</div>
                 <div class="stat-tile-content">
                     <div class="big-number yellow" id="invoicesUnpaid">0</div>
                     <div class="stat-detail">Unpaid invoices</div>
-                    
                     <div class="stat-row">
-                        <span class="label">$ Outstanding</span>
+                        <span class="label">$ Outstanding (unpaid)</span>
                         <span class="value red" id="invoicesAmountDue">$0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="label">Past Due Invoices</span>
+                        <span class="value red" id="invoicesPastDue">0</span>
                     </div>
                     <div class="stat-row">
                         <span class="label">Paid Invoices</span>
@@ -473,41 +514,63 @@
                         <span class="label">Total $ Invoiced</span>
                         <span class="value" id="invoicesTotalAmt">$0</span>
                     </div>
+                </div>
+            </div>
+
+            <!-- Secondary Billing / OHP -->
+            <div class="stat-tile">
+                <div class="stat-tile-header">📑 Secondary Billing (OHP)</div>
+                <div class="stat-tile-content">
+                    <div class="big-number teal" id="secBillOHP">0</div>
+                    <div class="stat-detail">Line items where BILL OHP action needed</div>
                     <div class="stat-row">
-                        <span class="label">Past Due (30+ days)</span>
-                        <span class="value red" id="invoicesPastDue">0</span>
+                        <span class="label">$ Recoverable from OHP</span>
+                        <span class="value teal" id="secRecoverable">$0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="label">Check Secondary Ins.</span>
+                        <span class="value yellow" id="secCheckSecondary">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="label">No Action Needed</span>
+                        <span class="value green" id="secNoAction">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="label">Total Line Items</span>
+                        <span class="value" id="secTotal">0</span>
+                    </div>
+                    <div style="margin-top:16px;">
+                        <div class="stat-detail" style="margin-bottom:8px;">OHP Recovery by Status</div>
+                        <div id="secStatusBreakdown"></div>
                     </div>
                 </div>
             </div>
 
+            <!-- Action Required -->
             <div class="stat-tile">
-                <div class="stat-tile-header">🏢 Active Claims by Payer</div>
+                <div class="stat-tile-header">🚨 Action Required</div>
                 <div class="stat-tile-content">
-                    <div id="payerBreakdown"></div>
-                </div>
-            </div>
-
-            <div class="stat-tile">
-                <div class="stat-tile-header">📑 Sec Claims Stats</div>
-                <div class="stat-tile-content">
-                    <div class="placeholder-content">
-                        <div class="big-number" style="color: #4b5563;">-</div>
-                        <div class="stat-detail">Data not connected</div>
-                        <p style="font-size: 12px;">Need data from Sheri</p>
+                    <div class="big-number red" id="actionTotal">0</div>
+                    <div class="stat-detail">Open billing follow-up items</div>
+                    <div class="stat-row">
+                        <span class="label">High Priority</span>
+                        <span class="value red" id="actionHigh">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="label">Medium Priority</span>
+                        <span class="value yellow" id="actionMedium">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="label">Low Priority</span>
+                        <span class="value" id="actionLow">0</span>
+                    </div>
+                    <div style="margin-top:16px;">
+                        <div class="stat-detail" style="margin-bottom:8px;">By Task Type</div>
+                        <div id="actionByType"></div>
                     </div>
                 </div>
             </div>
 
-            <div class="stat-tile">
-                <div class="stat-tile-header">🔐 Auth Stats</div>
-                <div class="stat-tile-content">
-                    <div class="placeholder-content">
-                        <div class="big-number" style="color: #4b5563;">-</div>
-                        <div class="stat-detail">Data not connected</div>
-                        <p style="font-size: 12px;">Need data from Sheri</p>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <div class="footer">
@@ -517,254 +580,316 @@
 
     <script>
         const SHEET_ID = '11Uf2mb73ym-9VbK42xXJIlsaWy1drIZ-LP-w0r2OZWQ';
-        
+
         const SHEET_URLS = {
-            claims: `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Claims`,
-            payments: `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Payments`,
-            invoices: `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Invoices`
+            claims:    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Claims`,
+            payments:  `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Payments`,
+            invoices:  `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Invoices`,
+            secondary: `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Secondary_Billing_Check`,
+            actions:   `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Action_Required`
         };
 
         const PASSWORD = 'mgmt2026';
 
+        // ── CSV parser ──────────────────────────────────────────────────────────
         function parseCSV(csv) {
             const lines = [];
-            let currentLine = '';
-            let inQuotes = false;
-            
+            let cur = '', inQ = false;
             for (let i = 0; i < csv.length; i++) {
-                const char = csv[i];
-                if (char === '"') {
-                    inQuotes = !inQuotes;
-                    currentLine += char;
-                } else if (char === '\n' && !inQuotes) {
-                    if (currentLine.trim()) lines.push(currentLine);
-                    currentLine = '';
-                } else {
-                    currentLine += char;
-                }
+                const c = csv[i];
+                if (c === '"') { inQ = !inQ; cur += c; }
+                else if (c === '\n' && !inQ) { if (cur.trim()) lines.push(cur); cur = ''; }
+                else cur += c;
             }
-            if (currentLine.trim()) lines.push(currentLine);
-            
+            if (cur.trim()) lines.push(cur);
             if (lines.length === 0) return [];
-            
             const headers = parseCSVLine(lines[0]);
-            const data = [];
-            
-            for (let i = 1; i < lines.length; i++) {
-                const values = parseCSVLine(lines[i]);
+            return lines.slice(1).map(l => {
+                const vals = parseCSVLine(l);
                 const row = {};
-                headers.forEach((header, index) => {
-                    row[header] = values[index] || '';
-                });
-                data.push(row);
-            }
-            return data;
+                headers.forEach((h, i) => row[h.trim()] = (vals[i] || '').trim().replace(/^"|"$/g, ''));
+                return row;
+            });
         }
 
         function parseCSVLine(line) {
-            const result = [];
-            let current = '';
-            let inQuotes = false;
-            
+            const res = []; let cur = '', inQ = false;
             for (let i = 0; i < line.length; i++) {
-                const char = line[i];
-                if (char === '"') {
-                    inQuotes = !inQuotes;
-                } else if (char === ',' && !inQuotes) {
-                    result.push(current.trim().replace(/^"|"$/g, ''));
-                    current = '';
-                } else {
-                    current += char;
-                }
+                const c = line[i];
+                if (c === '"') inQ = !inQ;
+                else if (c === ',' && !inQ) { res.push(cur); cur = ''; }
+                else cur += c;
             }
-            result.push(current.trim().replace(/^"|"$/g, ''));
-            return result;
+            res.push(cur);
+            return res.map(s => s.trim().replace(/^"|"$/g, ''));
         }
 
         async function fetchSheetData(url) {
-            const response = await fetch(url);
-            if (!response.ok) throw new Error('Failed to fetch');
-            return parseCSV(await response.text());
+            const res = await fetch(url);
+            if (!res.ok) throw new Error('Fetch failed: ' + url);
+            return parseCSV(await res.text());
         }
 
-        function formatCurrency(val) {
-            const num = parseFloat(String(val).replace(/[,$]/g, '')) || 0;
-            return '$' + num.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        // ── Helpers ─────────────────────────────────────────────────────────────
+        function fmt$(val) {
+            const n = parseFloat(String(val).replace(/[,$]/g, '')) || 0;
+            return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
         }
 
-        function daysBetween(dateStr) {
-            if (!dateStr) return 0;
-            let date;
-            if (dateStr.includes('/')) {
-                const parts = dateStr.split('/');
-                if (parts.length !== 3) return 0;
-                date = new Date(parts[2], parts[0] - 1, parts[1]);
-            } else if (dateStr.includes('-')) {
-                date = new Date(dateStr);
-            } else {
-                return 0;
-            }
-            return Math.floor((new Date() - date) / (1000 * 60 * 60 * 24));
+        function num(val) {
+            return parseFloat(String(val).replace(/[,$]/g, '')) || 0;
         }
 
+        function set(id, val) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = val;
+        }
+
+        // ── Claims ───────────────────────────────────────────────────────────────
         async function loadClaimsStats() {
-            try {
-                const data = await fetchSheetData(SHEET_URLS.claims);
-                
-                const active = data.filter(row => {
-                    const status = (row.Status || '').toLowerCase();
-                    return status !== 'paid' && status !== 'deductible';
+            const data = await fetchSheetData(SHEET_URLS.claims);
+
+            // Filter rows that look like real claims (ClaimNumber not empty / not header)
+            const rows = data.filter(r => r.ClaimNumber && r.ClaimNumber !== 'ClaimNumber');
+
+            const active = rows.filter(r => {
+                const s = (r.Status || '').toLowerCase();
+                return s !== 'paid' && s !== 'deductible';
+            });
+
+            const denied      = rows.filter(r => r.Status === 'Denied');
+            const rejected    = rows.filter(r => r.Status === 'Rejected');
+            const processing  = rows.filter(r => r.Status === 'Processing');
+            const acknowledged= rows.filter(r => r.Status === 'Acknowledged');
+            const submitted   = rows.filter(r => r.Status === 'Submitted');
+            const unreviewed  = rows.filter(r => (r.ReviewStatus || '') === 'NotReviewed');
+            const hasSecondary= rows.filter(r => (r.HasSecondary || '').toLowerCase() === 'true' || r.HasSecondary === '1');
+
+            const outstanding = active.reduce((s, r) => s + num(r.TotalBilled), 0);
+            const deniedAmt   = denied.reduce((s, r) => s + num(r.TotalBilled), 0);
+            const totalBilled = rows.reduce((s, r) => s + num(r.TotalBilled), 0);
+
+            // Aging buckets from AgingBucket column
+            const ag3160 = rows.filter(r => r.AgingBucket === '31-60');
+            const ag6190 = rows.filter(r => r.AgingBucket === '61-90');
+            const ag90   = rows.filter(r => r.AgingBucket === '90+');
+
+            const ag3160Amt = ag3160.reduce((s, r) => s + num(r.TotalBilled), 0);
+            const ag6190Amt = ag6190.reduce((s, r) => s + num(r.TotalBilled), 0);
+            const ag90Amt   = ag90.reduce((s, r) => s + num(r.TotalBilled), 0);
+
+            // Exec cards
+            set('execActiveClaims', active.length.toLocaleString());
+            set('execActiveAmt', fmt$(outstanding) + ' outstanding');
+            set('execDenied', denied.length);
+            set('execDeniedAmt', fmt$(deniedAmt));
+            set('execTotalClaims', rows.length.toLocaleString());
+            set('execTotalBilled', fmt$(totalBilled) + ' billed');
+            set('exec90Plus', ag90.length);
+
+            // Tile
+            set('claimsActive', active.length);
+            set('claimsDenied', denied.length);
+            set('claimsRejected', rejected.length);
+            set('claimsProcessing', processing.length);
+            set('claimsAcknowledged', acknowledged.length);
+            set('claimsSubmitted', submitted.length);
+            set('claimsOutstanding', fmt$(outstanding));
+            set('claimsUnreviewed', unreviewed.length);
+            set('claimsHasSecondary', hasSecondary.length);
+
+            // Aging
+            set('aging3160', ag3160.length);
+            set('aging3160Amt', fmt$(ag3160Amt));
+            set('aging6190', ag6190.length);
+            set('aging6190Amt', fmt$(ag6190Amt));
+            set('aging90', ag90.length);
+            set('aging90Amt', fmt$(ag90Amt));
+
+            // Active claims by payer
+            const payerCounts = {};
+            active.forEach(r => {
+                const p = r.PayerName || 'Unknown';
+                if (!payerCounts[p]) payerCounts[p] = { count: 0, amount: 0 };
+                payerCounts[p].count++;
+                payerCounts[p].amount += num(r.TotalBilled);
+            });
+            let payerHTML = '';
+            Object.entries(payerCounts)
+                .sort((a, b) => b[1].count - a[1].count)
+                .slice(0, 10)
+                .forEach(([payer, d]) => {
+                    payerHTML += `<div class="stat-row">
+                        <span class="label">${payer.substring(0, 28)}${payer.length > 28 ? '…' : ''}</span>
+                        <span class="value">${d.count} <span style="color:#4b5563;font-size:11px;">(${fmt$(d.amount)})</span></span>
+                    </div>`;
                 });
-
-                const denied = active.filter(r => (r.Status || '').toLowerCase() === 'denied');
-                const rejected = active.filter(r => (r.Status || '').toLowerCase() === 'rejected');
-                const processing = active.filter(r => (r.Status || '').toLowerCase() === 'processing');
-                const acknowledged = active.filter(r => (r.Status || '').toLowerCase() === 'acknowledged');
-
-                const outstanding = active.reduce((sum, r) => sum + (parseFloat(String(r.TotalBilled || 0).replace(/[,$]/g, '')) || 0), 0);
-                const deniedAmt = denied.reduce((sum, r) => sum + (parseFloat(String(r.TotalBilled || 0).replace(/[,$]/g, '')) || 0), 0);
-                const totalBilled = data.reduce((sum, r) => sum + (parseFloat(String(r.TotalBilled || 0).replace(/[,$]/g, '')) || 0), 0);
-
-                const aging030 = active.filter(r => daysBetween(r.Date) <= 30);
-                const aging3160 = active.filter(r => daysBetween(r.Date) > 30 && daysBetween(r.Date) <= 60);
-                const aging6190 = active.filter(r => daysBetween(r.Date) > 60 && daysBetween(r.Date) <= 90);
-                const aging90 = active.filter(r => daysBetween(r.Date) > 90);
-
-                const aging030Amt = aging030.reduce((sum, r) => sum + (parseFloat(String(r.TotalBilled || 0).replace(/[,$]/g, '')) || 0), 0);
-                const aging3160Amt = aging3160.reduce((sum, r) => sum + (parseFloat(String(r.TotalBilled || 0).replace(/[,$]/g, '')) || 0), 0);
-                const aging6190Amt = aging6190.reduce((sum, r) => sum + (parseFloat(String(r.TotalBilled || 0).replace(/[,$]/g, '')) || 0), 0);
-                const aging90Amt = aging90.reduce((sum, r) => sum + (parseFloat(String(r.TotalBilled || 0).replace(/[,$]/g, '')) || 0), 0);
-
-                document.getElementById('execActiveClaims').textContent = active.length.toLocaleString();
-                document.getElementById('execActiveAmt').textContent = formatCurrency(outstanding) + ' outstanding';
-                document.getElementById('execDenied').textContent = denied.length;
-                document.getElementById('execDeniedAmt').textContent = formatCurrency(deniedAmt);
-                document.getElementById('execTotalClaims').textContent = data.length.toLocaleString();
-                document.getElementById('execTotalBilled').textContent = formatCurrency(totalBilled) + ' billed';
-                document.getElementById('exec90Plus').textContent = aging90.length;
-                document.getElementById('exec90Amt').textContent = formatCurrency(aging90Amt);
-
-                document.getElementById('claimsActive').textContent = active.length;
-                document.getElementById('claimsDenied').textContent = denied.length;
-                document.getElementById('claimsRejected').textContent = rejected.length;
-                document.getElementById('claimsProcessing').textContent = processing.length;
-                document.getElementById('claimsAcknowledged').textContent = acknowledged.length;
-                document.getElementById('claimsOutstanding').textContent = formatCurrency(outstanding);
-
-                document.getElementById('aging030').textContent = aging030.length;
-                document.getElementById('aging030Amt').textContent = formatCurrency(aging030Amt);
-                document.getElementById('aging3160').textContent = aging3160.length;
-                document.getElementById('aging3160Amt').textContent = formatCurrency(aging3160Amt);
-                document.getElementById('aging6190').textContent = aging6190.length;
-                document.getElementById('aging6190Amt').textContent = formatCurrency(aging6190Amt);
-                document.getElementById('aging90').textContent = aging90.length;
-                document.getElementById('aging90Amt').textContent = formatCurrency(aging90Amt);
-
-                const payerCounts = {};
-                active.forEach(r => {
-                    const p = r.Payer || 'Unknown';
-                    if (!payerCounts[p]) payerCounts[p] = { count: 0, amount: 0 };
-                    payerCounts[p].count++;
-                    payerCounts[p].amount += parseFloat(String(r.TotalBilled || 0).replace(/[,$]/g, '')) || 0;
-                });
-
-                let payerHTML = '';
-                Object.entries(payerCounts)
-                    .sort((a, b) => b[1].count - a[1].count)
-                    .slice(0, 10)
-                    .forEach(([payer, d]) => {
-                        payerHTML += `<div class="stat-row">
-                            <span class="label">${payer.substring(0, 25)}${payer.length > 25 ? '...' : ''}</span>
-                            <span class="value">${d.count}</span>
-                        </div>`;
-                    });
-                document.getElementById('payerBreakdown').innerHTML = payerHTML || '<p>No data</p>';
-
-            } catch (error) {
-                console.error('Claims error:', error);
-            }
+            document.getElementById('payerBreakdown').innerHTML = payerHTML || '<p style="color:#4b5563">No active claims</p>';
         }
 
+        // ── Payments ─────────────────────────────────────────────────────────────
         async function loadPaymentsStats() {
-            try {
-                const data = await fetchSheetData(SHEET_URLS.payments);
-                
-                const totalCollected = data.reduce((sum, r) => sum + (parseFloat(String(r.Amount || 0).replace(/[,$]/g, '')) || 0), 0);
+            const data = await fetchSheetData(SHEET_URLS.payments);
+            const rows = data.filter(r => r.PayerName && r.PayerName !== 'PayerName');
 
-                const achPayments = data.filter(r => (r.PaymentMethod || '').toUpperCase() === 'ACH');
-                const chkPayments = data.filter(r => (r.PaymentMethod || '').toUpperCase() === 'CHK');
-                const nonPayments = data.filter(r => (r.PaymentMethod || '').toUpperCase() === 'NON');
+            const totalCollected = rows.reduce((s, r) => s + num(r.Amount), 0);
 
-                document.getElementById('execCollected').textContent = formatCurrency(totalCollected);
-                document.getElementById('execPaymentCount').textContent = data.length + ' records';
+            set('execCollected', fmt$(totalCollected));
+            set('execPaymentCount', rows.length + ' records');
+            set('paymentsTotal', fmt$(totalCollected));
+            set('paymentsCount', rows.length);
 
-                document.getElementById('paymentsTotal').textContent = formatCurrency(totalCollected);
-                document.getElementById('paymentsACH').textContent = achPayments.length;
-                document.getElementById('paymentsCHK').textContent = chkPayments.length;
-                document.getElementById('paymentsNON').textContent = nonPayments.length;
-                document.getElementById('paymentsCount').textContent = data.length;
-
-                const payerAmounts = {};
-                data.forEach(r => {
-                    const p = r.PayerName || 'Unknown';
-                    payerAmounts[p] = (payerAmounts[p] || 0) + (parseFloat(String(r.Amount || 0).replace(/[,$]/g, '')) || 0);
+            // Top payers by amount
+            const payerAmts = {};
+            rows.forEach(r => {
+                const p = r.PayerName || 'Unknown';
+                payerAmts[p] = (payerAmts[p] || 0) + num(r.Amount);
+            });
+            let html = '';
+            Object.entries(payerAmts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 8)
+                .forEach(([payer, amount]) => {
+                    const short = payer.length > 22 ? payer.substring(0, 22) + '…' : payer;
+                    html += `<div class="payer-item">
+                        <span class="name">${short}</span>
+                        <span class="val">${fmt$(amount)}</span>
+                    </div>`;
                 });
-
-                let html = '';
-                Object.entries(payerAmounts)
-                    .sort((a, b) => b[1] - a[1])
-                    .slice(0, 8)
-                    .forEach(([payer, amount]) => {
-                        html += `<div class="payer-item">
-                            <span class="name">${payer.substring(0, 18)}...</span>
-                            <span class="val">${formatCurrency(amount)}</span>
-                        </div>`;
-                    });
-                document.getElementById('topPayers').innerHTML = html;
-
-            } catch (error) {
-                console.error('Payments error:', error);
-            }
+            document.getElementById('topPayers').innerHTML = html;
         }
 
+        // ── Invoices ─────────────────────────────────────────────────────────────
         async function loadInvoicesStats() {
-            try {
-                const data = await fetchSheetData(SHEET_URLS.invoices);
-                
-                const unpaid = data.filter(r => (r.Status || '').toLowerCase() === 'unpaid');
-                const paid = data.filter(r => (r.Status || '').toLowerCase() === 'paid');
-                
-                const amountDue = data.reduce((sum, r) => sum + (parseFloat(String(r.AmountDue || 0).replace(/[,$]/g, '')) || 0), 0);
-                const totalInvoiced = data.reduce((sum, r) => sum + (parseFloat(String(r.Total || 0).replace(/[,$]/g, '')) || 0), 0);
+            const data = await fetchSheetData(SHEET_URLS.invoices);
+            const rows = data.filter(r => r.Number && r.Number !== 'Number');
 
-                const pastDue = unpaid.filter(r => daysBetween(r.DueDate) > 30);
+            const unpaid   = rows.filter(r => r.Status === 'Unpaid');
+            const pastDue  = rows.filter(r => r.Status === 'PastDue');
+            const paid     = rows.filter(r => r.Status === 'Paid');
 
-                document.getElementById('execUnpaidInv').textContent = unpaid.length;
-                document.getElementById('execUnpaidAmt').textContent = formatCurrency(amountDue) + ' due';
+            const amountDue    = unpaid.reduce((s, r) => s + num(r.AmountDue), 0);
+            const pastDueAmt   = pastDue.reduce((s, r) => s + num(r.AmountDue), 0);
+            const totalInvoiced= rows.reduce((s, r) => s + num(r.Total), 0);
 
-                document.getElementById('invoicesUnpaid').textContent = unpaid.length;
-                document.getElementById('invoicesAmountDue').textContent = formatCurrency(amountDue);
-                document.getElementById('invoicesPaid').textContent = paid.length;
-                document.getElementById('invoicesTotal').textContent = data.length;
-                document.getElementById('invoicesTotalAmt').textContent = formatCurrency(totalInvoiced);
-                document.getElementById('invoicesPastDue').textContent = pastDue.length;
+            set('execUnpaidInv', unpaid.length + pastDue.length);
+            set('execUnpaidAmt', fmt$(amountDue + pastDueAmt) + ' due');
 
-            } catch (error) {
-                console.error('Invoices error:', error);
-            }
+            set('invoicesUnpaid', unpaid.length);
+            set('invoicesAmountDue', fmt$(amountDue));
+            set('invoicesPastDue', pastDue.length);
+            set('invoicesPaid', paid.length);
+            set('invoicesTotal', rows.length);
+            set('invoicesTotalAmt', fmt$(totalInvoiced));
         }
 
+        // ── Secondary Billing ────────────────────────────────────────────────────
+        async function loadSecondaryStats() {
+            const raw = await fetchSheetData(SHEET_URLS.secondary);
+            // The sheet has a title row and a header row — find the real header
+            // gviz will return first real row as header; data rows follow
+            // Header row in sheet is row 2 (0-indexed row 1): ClaimNumber, ClientId, etc.
+            // gviz picks up row 1 as headers automatically if it's the first non-empty row
+            // Filter to rows that have ClaimNumber values (not blank, not header text)
+            const rows = raw.filter(r => {
+                const cn = r.ClaimNumber || r['ClaimNumber'] || '';
+                return cn && cn !== 'ClaimNumber' && cn !== 'SECONDARY BILLING CHECK | Compares Primary Payment to DMAP Rate | Auto-refreshed';
+            });
+
+            const billOHP      = rows.filter(r => (r.Action || '').trim() === 'BILL OHP');
+            const checkSec     = rows.filter(r => (r.Action || '').trim() === 'Check Secondary');
+            const noAction     = rows.filter(r => (r.Action || '').trim() === 'No Action');
+
+            const recoverable  = billOHP.reduce((s, r) => s + num(r['$ to Recover'] || r['$_to_Recover'] || 0), 0);
+
+            set('execOHPRecovery', fmt$(recoverable));
+            set('execOHPCount', billOHP.length + ' line items');
+
+            set('secBillOHP', billOHP.length.toLocaleString());
+            set('secRecoverable', fmt$(recoverable));
+            set('secCheckSecondary', checkSec.length.toLocaleString());
+            set('secNoAction', noAction.length.toLocaleString());
+            set('secTotal', rows.length.toLocaleString());
+
+            // Status breakdown for BILL OHP rows
+            const statusCounts = {};
+            billOHP.forEach(r => {
+                const s = r.Status || 'Unknown';
+                statusCounts[s] = (statusCounts[s] || 0) + 1;
+            });
+            let html = '';
+            Object.entries(statusCounts)
+                .sort((a, b) => b[1] - a[1])
+                .forEach(([status, count]) => {
+                    html += `<div class="stat-row">
+                        <span class="label">${status}</span>
+                        <span class="value">${count.toLocaleString()}</span>
+                    </div>`;
+                });
+            document.getElementById('secStatusBreakdown').innerHTML = html || '<p style="color:#4b5563">No data</p>';
+        }
+
+        // ── Action Required ──────────────────────────────────────────────────────
+        async function loadActionStats() {
+            const raw = await fetchSheetData(SHEET_URLS.actions);
+            // Filter to real data rows (Claim ID is numeric-ish)
+            const rows = raw.filter(r => {
+                const id = r['Claim ID'] || r['ClaimID'] || '';
+                return id && id !== 'Claim ID' && id !== 'ACTION REQUIRED - BILLING FOLLOW-UP | Syncs to Notion';
+            });
+
+            const open   = rows.filter(r => (r.Completed || '').trim() === 'No');
+            const high   = open.filter(r => r.Priority === 'High');
+            const medium = open.filter(r => r.Priority === 'Medium');
+            const low    = open.filter(r => r.Priority === 'Low');
+
+            set('actionTotal', open.length.toLocaleString());
+            set('actionHigh', high.length.toLocaleString());
+            set('actionMedium', medium.length.toLocaleString());
+            set('actionLow', low.length.toLocaleString());
+
+            // By task type
+            const taskCounts = {};
+            open.forEach(r => {
+                const t = r['Task Type'] || 'Unknown';
+                taskCounts[t] = (taskCounts[t] || 0) + 1;
+            });
+            let html = '';
+            Object.entries(taskCounts)
+                .sort((a, b) => b[1] - a[1])
+                .forEach(([task, count]) => {
+                    html += `<div class="action-item">
+                        <span class="task">${task}</span>
+                        <span class="count">${count.toLocaleString()}</span>
+                    </div>`;
+                });
+            document.getElementById('actionByType').innerHTML = html || '<p style="color:#4b5563">No open actions</p>';
+        }
+
+        // ── Load All ─────────────────────────────────────────────────────────────
         async function loadAllData() {
             document.getElementById('loadingOverlay').classList.remove('hidden');
             document.getElementById('errorMsg').style.display = 'none';
-            
-            await Promise.all([loadClaimsStats(), loadPaymentsStats(), loadInvoicesStats()]);
-            
-            document.getElementById('lastUpdated').textContent = 'Updated: ' + new Date().toLocaleTimeString();
-            document.getElementById('dataDate').textContent = new Date().toLocaleDateString();
+            try {
+                await Promise.all([
+                    loadClaimsStats(),
+                    loadPaymentsStats(),
+                    loadInvoicesStats(),
+                    loadSecondaryStats(),
+                    loadActionStats()
+                ]);
+                set('lastUpdated', 'Updated: ' + new Date().toLocaleTimeString());
+                set('dataDate', new Date().toLocaleDateString());
+            } catch (err) {
+                const msg = document.getElementById('errorMsg');
+                msg.style.display = 'block';
+                msg.textContent = 'Error loading data: ' + err.message + '. Make sure the Google Sheet is shared publicly.';
+                console.error(err);
+            }
             document.getElementById('loadingOverlay').classList.add('hidden');
         }
 
+        // ── Auth ─────────────────────────────────────────────────────────────────
         function checkPassword() {
             if (document.getElementById('passwordInput').value === PASSWORD) {
                 document.getElementById('loginContainer').style.display = 'none';
