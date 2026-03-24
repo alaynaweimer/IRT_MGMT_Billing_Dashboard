@@ -66,13 +66,13 @@
         .exec-card .label { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
         .exec-card .value { font-size: 28px; font-weight: 700; font-family: monospace; }
         .exec-card .subtext { font-size: 12px; color: #4b5563; margin-top: 4px; }
-        .exec-card.red    { border-color: rgba(239,68,68,0.3);   } .exec-card.red .value    { color: #ef4444; }
-        .exec-card.green  { border-color: rgba(16,185,129,0.3);  } .exec-card.green .value  { color: #10b981; }
-        .exec-card.yellow { border-color: rgba(245,158,11,0.3);  } .exec-card.yellow .value { color: #f59e0b; }
-        .exec-card.purple { border-color: rgba(139,92,246,0.3);  } .exec-card.purple .value { color: #8b5cf6; }
-        .exec-card.blue   { border-color: rgba(59,130,246,0.3);  } .exec-card.blue .value   { color: #3b82f6; }
-        .exec-card.orange { border-color: rgba(249,115,22,0.3);  } .exec-card.orange .value { color: #f97316; }
-        .exec-card.teal   { border-color: rgba(20,184,166,0.3);  } .exec-card.teal .value   { color: #14b8a6; }
+        .exec-card.red    { border-color: rgba(239,68,68,0.3);  } .exec-card.red .value    { color: #ef4444; }
+        .exec-card.green  { border-color: rgba(16,185,129,0.3); } .exec-card.green .value  { color: #10b981; }
+        .exec-card.yellow { border-color: rgba(245,158,11,0.3); } .exec-card.yellow .value { color: #f59e0b; }
+        .exec-card.purple { border-color: rgba(139,92,246,0.3); } .exec-card.purple .value { color: #8b5cf6; }
+        .exec-card.blue   { border-color: rgba(59,130,246,0.3); } .exec-card.blue .value   { color: #3b82f6; }
+        .exec-card.orange { border-color: rgba(249,115,22,0.3); } .exec-card.orange .value { color: #f97316; }
+        .exec-card.teal   { border-color: rgba(20,184,166,0.3); } .exec-card.teal .value   { color: #14b8a6; }
 
         .stats-grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -95,7 +95,7 @@
         .stat-row .value { font-size: 15px; font-weight: 600; font-family: monospace; }
         .stat-row .value.red    { color: #ef4444; } .stat-row .value.green  { color: #10b981; }
         .stat-row .value.yellow { color: #f59e0b; } .stat-row .value.orange { color: #f97316; }
-        .stat-row .value.teal   { color: #14b8a6; }
+        .stat-row .value.teal   { color: #14b8a6; } .stat-row .value.blue   { color: #3b82f6; }
 
         .aging-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; }
         .aging-bucket { text-align: center; padding: 12px 8px; background: #0a0a0f; border-radius: 8px; border: 1px solid #1e1e2e; }
@@ -114,6 +114,13 @@
         .action-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: #0a0a0f; border-radius: 6px; margin-bottom: 6px; font-size: 12px; }
         .action-item .task  { color: #94a3b8; flex: 1; }
         .action-item .count { font-weight: 600; font-family: monospace; color: #e2e8f0; }
+
+        .progress-wrap { margin-bottom: 16px; }
+        .progress-label { display: flex; justify-content: space-between; margin-bottom: 6px; }
+        .progress-label span:first-child { font-size: 12px; color: #94a3b8; }
+        .progress-label span:last-child  { font-size: 13px; font-weight: 600; color: #10b981; }
+        .progress-bar-bg { background: #1e1e2e; border-radius: 4px; height: 8px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #10b981, #059669); width: 0%; transition: width 0.6s ease; border-radius: 4px; }
 
         .footer { text-align: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid #1e1e2e; color: #4b5563; font-size: 12px; }
 
@@ -295,21 +302,20 @@
                 </div>
             </div>
 
-            <!-- Action Required — live from Notion -->
+            <!-- Action Required — live from Notion via sheet -->
             <div class="stat-tile">
                 <div class="stat-tile-header">🚨 Action Required</div>
                 <div class="stat-tile-content">
                     <div class="big-number red" id="actionTotal">0</div>
                     <div class="stat-detail">Total billing tasks in Notion</div>
 
-                    <!-- Completion rate bar -->
-                    <div style="margin-bottom:16px;">
-                        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-                            <span style="font-size:12px;color:#94a3b8;">Completion Rate</span>
-                            <span style="font-size:13px;font-weight:600;color:#10b981;" id="actionCompletionRate">0%</span>
+                    <div class="progress-wrap">
+                        <div class="progress-label">
+                            <span>Completion Rate</span>
+                            <span id="actionCompletionRate">0%</span>
                         </div>
-                        <div style="background:#1e1e2e;border-radius:4px;height:8px;overflow:hidden;">
-                            <div id="actionProgressBar" style="height:100%;background:linear-gradient(90deg,#10b981,#059669);width:0%;transition:width 0.5s;border-radius:4px;"></div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" id="actionProgressBar"></div>
                         </div>
                     </div>
 
@@ -318,7 +324,7 @@
                     <div class="stat-row"><span class="label">🟡 Needs Review</span><span class="value yellow" id="actionNeedsReview">0</span></div>
                     <div class="stat-row"><span class="label">✅ Done</span><span class="value green" id="actionDone">0</span></div>
 
-                    <div style="margin-top:16px;padding-top:12px;border-top:1px solid #1e1e2e;">
+                    <div style="margin-top:16px; padding-top:12px; border-top:1px solid #1e1e2e;">
                         <div class="stat-row"><span class="label">🔥 High Priority Remaining</span><span class="value red" id="actionHighRemaining">0</span></div>
                         <div class="stat-row"><span class="label">$ at Stake (open)</span><span class="value teal" id="actionStakeOpen">$0</span></div>
                         <div class="stat-row"><span class="label">$ at Stake (done)</span><span class="value green" id="actionStakeDone">$0</span></div>
@@ -334,24 +340,23 @@
         </div>
 
         <div class="footer">
-            Data source: In Reach Billing Google Sheet | <span id="dataDate"></span>
+            Data source: In Reach Billing Google Sheet + Notion | <span id="dataDate"></span>
         </div>
     </div>
 
     <script>
-        const SHEET_ID        = '11Uf2mb73ym-9VbK42xXJIlsaWy1drIZ-LP-w0r2OZWQ';
-        const PASSWORD        = 'mgmt2026';
-        const NOTION_API_KEY  = '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';
-        const NOTION_DB_ID    = '32cc4bbd3156809dbcccf5d3e87900e3';
+        const SHEET_ID = '11Uf2mb73ym-9VbK42xXJIlsaWy1drIZ-LP-w0r2OZWQ';
+        const PASSWORD = 'mgmt2026';
 
         const SHEET_URLS = {
-            claims:    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Claims`,
-            payments:  `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Payments`,
-            invoices:  `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Invoices`,
-            secondary: `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Secondary_Billing_Check`
+            claims:       `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Claims`,
+            payments:     `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Payments`,
+            invoices:     `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Invoices`,
+            secondary:    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Secondary_Billing_Check`,
+            notionStatus: `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Notion_Status`
         };
 
-        // ── CSV parser ──────────────────────────────────────────────────────────
+        // ── CSV parser ────────────────────────────────────────────────────────────
         function parseCSV(csv) {
             const lines = [];
             let cur = '', inQ = false;
@@ -390,12 +395,13 @@
             return parseCSV(await res.text());
         }
 
-        // ── Helpers ─────────────────────────────────────────────────────────────
-        const fmt$ = val => '$' + (parseFloat(String(val).replace(/[,$]/g,''))||0).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
+        // ── Helpers ───────────────────────────────────────────────────────────────
+        const fmt$ = val => '$' + (parseFloat(String(val).replace(/[,$]/g,''))||0)
+                            .toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
         const num  = val => parseFloat(String(val).replace(/[,$]/g,'')) || 0;
         const set  = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
 
-        // ── Claims ───────────────────────────────────────────────────────────────
+        // ── Claims ────────────────────────────────────────────────────────────────
         async function loadClaimsStats() {
             const data = await fetchSheetData(SHEET_URLS.claims);
             const rows = data.filter(r => r.ClaimNumber && r.ClaimNumber !== 'ClaimNumber');
@@ -416,7 +422,6 @@
             const ag6190 = rows.filter(r => r.AgingBucket === '61-90');
             const ag90   = rows.filter(r => r.AgingBucket === '90+');
 
-            // Exec cards
             set('execActiveClaims', active.length.toLocaleString());
             set('execActiveAmt',    fmt$(outstanding) + ' outstanding');
             set('execDenied',       denied.length);
@@ -425,17 +430,15 @@
             set('execTotalBilled',  fmt$(totalBilled) + ' billed');
             set('exec90Plus',       ag90.length);
 
-            // Tile
-            set('claimsActive',      active.length);
-            set('claimsDenied',      denied.length);
-            set('claimsRejected',    rejected.length);
-            set('claimsProcessing',  processing.length);
-            set('claimsAcknowledged',acknowledged.length);
-            set('claimsSubmitted',   submitted.length);
-            set('claimsOutstanding', fmt$(outstanding));
-            set('claimsUnreviewed',  unreviewed.length);
+            set('claimsActive',       active.length);
+            set('claimsDenied',       denied.length);
+            set('claimsRejected',     rejected.length);
+            set('claimsProcessing',   processing.length);
+            set('claimsAcknowledged', acknowledged.length);
+            set('claimsSubmitted',    submitted.length);
+            set('claimsOutstanding',  fmt$(outstanding));
+            set('claimsUnreviewed',   unreviewed.length);
 
-            // Aging
             set('aging3160',    ag3160.length);
             set('aging3160Amt', fmt$(ag3160.reduce((s,r)=>s+num(r.TotalBilled),0)));
             set('aging6190',    ag6190.length);
@@ -443,7 +446,6 @@
             set('aging90',      ag90.length);
             set('aging90Amt',   fmt$(ag90.reduce((s,r)=>s+num(r.TotalBilled),0)));
 
-            // Active claims by payer
             const pc = {};
             active.forEach(r => {
                 const p = r.PayerName || 'Unknown';
@@ -462,8 +464,6 @@
         // ── Payments (3-month rolling) ────────────────────────────────────────────
         async function loadPaymentsStats() {
             const data = await fetchSheetData(SHEET_URLS.payments);
-            // Payments sheet columns: InvoiceNumber, InvoiceId, ClientId, PayerName,
-            //                         DateCreated, Amount, PaymentMethod, Status
             const rows = data.filter(r => r.Amount && r.Amount !== 'Amount');
 
             const cutoff = new Date();
@@ -482,36 +482,31 @@
             set('paymentsCount',    recent.length + ' records in window');
             set('paymentsCountAll', rows.length + ' total all-time');
 
-            // Top payers by $ in 3-month window
-            // PayerName may be empty in new schema — use InvoiceNumber as fallback label
             const pa = {};
             recent.forEach(r => {
-                const p = r.PayerName || r.InvoiceId || 'Unknown';
+                const p = r.PayerName || r.InvoiceNumber || 'Unknown';
                 pa[p] = (pa[p]||0) + num(r.Amount);
             });
             document.getElementById('topPayers').innerHTML =
                 Object.entries(pa).sort((a,b)=>b[1]-a[1]).slice(0,8)
                 .map(([p,amt]) => `<div class="payer-item">
-                    <span class="name">${(p.length>22?p.substring(0,22)+'…':p)}</span>
+                    <span class="name">${p.length>22?p.substring(0,22)+'…':p}</span>
                     <span class="val">${fmt$(amt)}</span>
                 </div>`).join('');
         }
 
-        // ── Invoices ─────────────────────────────────────────────────────────────
+        // ── Invoices ──────────────────────────────────────────────────────────────
         async function loadInvoicesStats() {
             const data = await fetchSheetData(SHEET_URLS.invoices);
-            // Invoices sheet columns: Number, Date, DueDate, DateCreated, Status,
-            //                         ClientId, CreatedBy, SubTotal, Discount,
-            //                         Total, TotalPaid, AmountDue
             const rows = data.filter(r => r.Number && r.Number !== 'Number');
 
             const unpaid  = rows.filter(r => r.Status === 'Unpaid');
             const pastDue = rows.filter(r => r.Status === 'PastDue');
             const paid    = rows.filter(r => r.Status === 'Paid');
 
-            const amountDue    = unpaid.reduce((s,r)  => s + num(r.AmountDue), 0);
-            const pastDueAmt   = pastDue.reduce((s,r) => s + num(r.AmountDue), 0);
-            const totalInvoiced= rows.reduce((s,r)    => s + num(r.Total), 0);
+            const amountDue     = unpaid.reduce((s,r)  => s + num(r.AmountDue), 0);
+            const pastDueAmt    = pastDue.reduce((s,r) => s + num(r.AmountDue), 0);
+            const totalInvoiced = rows.reduce((s,r)    => s + num(r.Total), 0);
 
             set('execUnpaidInv',  unpaid.length + pastDue.length);
             set('execUnpaidAmt',  fmt$(amountDue + pastDueAmt) + ' due');
@@ -524,21 +519,20 @@
             set('invoicesTotalAmt',  fmt$(totalInvoiced));
         }
 
-        // ── Secondary Billing ────────────────────────────────────────────────────
+        // ── Secondary Billing ─────────────────────────────────────────────────────
         async function loadSecondaryStats() {
             const raw = await fetchSheetData(SHEET_URLS.secondary);
             if (raw.length === 0) return;
 
-            // Sheet has headers in row 1, data in row 2+
-            // gviz returns headers as keys directly — just filter out blank/header rows
             const rows = raw.filter(r => {
                 const cn = String(r.ClaimNumber || '').trim();
-                return cn && cn !== 'ClaimNumber' && cn !== 'SECONDARY BILLING CHECK | Compares Primary Payment to DMAP Rate | Auto-refreshed';
+                return cn && cn !== 'ClaimNumber' &&
+                       cn !== 'SECONDARY BILLING CHECK | Compares Primary Payment to DMAP Rate | Auto-refreshed';
             });
 
-            const billOHP  = rows.filter(r => r.Action === 'BILL OHP');
-            const checkSec = rows.filter(r => r.Action === 'Check Secondary');
-            const noAction = rows.filter(r => r.Action === 'No Action');
+            const billOHP     = rows.filter(r => r.Action === 'BILL OHP');
+            const checkSec    = rows.filter(r => r.Action === 'Check Secondary');
+            const noAction    = rows.filter(r => r.Action === 'No Action');
             const recoverable = billOHP.reduce((s,r) => s + num(r['$ to Recover']), 0);
 
             set('execOHPRecovery',   fmt$(recoverable));
@@ -549,7 +543,6 @@
             set('secNoAction',       noAction.length.toLocaleString());
             set('secTotal',          rows.length.toLocaleString());
 
-            // BILL OHP breakdown by claim status
             const sc = {};
             billOHP.forEach(r => { const s = r.Status||'Unknown'; sc[s]=(sc[s]||0)+1; });
             document.getElementById('secStatusBreakdown').innerHTML =
@@ -560,76 +553,45 @@
                 </div>`).join('') || '<p style="color:#4b5563">No data</p>';
         }
 
-        // ── Action Required — live from Notion ───────────────────────────────────
+        // ── Action Required — from Notion_Status sheet ────────────────────────────
         async function loadActionStats() {
             try {
-                let allPages = [], cursor = null;
+                const raw = await fetchSheetData(SHEET_URLS.notionStatus);
+                if (raw.length === 0) {
+                    set('actionTotal', '—');
+                    document.getElementById('actionByType').innerHTML =
+                        '<p style="color:#4b5563;font-size:12px;">No data — run Sync Notion Status from sheet menu</p>';
+                    return;
+                }
 
-                // Paginate through all Notion tasks
-                do {
-                    const body = { page_size: 100 };
-                    if (cursor) body.start_cursor = cursor;
-
-                    const res = await fetch(`https://api.notion.com/v1/databases/${NOTION_DB_ID}/query`, {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${NOTION_API_KEY}`,
-                            'Content-Type': 'application/json',
-                            'Notion-Version': '2022-06-28'
-                        },
-                        body: JSON.stringify(body)
-                    });
-
-                    if (!res.ok) throw new Error('Notion API error: ' + res.status);
-                    const data = await res.json();
-                    allPages = allPages.concat(data.results);
-                    cursor = data.has_more ? data.next_cursor : null;
-                } while (cursor);
-
-                // Parse each page
-                const tasks = allPages.map(p => ({
-                    status:   p.properties['Status']?.select?.name || 'To Do',
-                    priority: p.properties['Priority']?.select?.name || 'Low',
-                    stake:    p.properties['$ at Stake']?.number || 0,
-                    taskType: p.properties['Name']?.title?.[0]?.plain_text || ''
-                }));
-
+                const tasks = raw.filter(r => r.ClaimId && r.ClaimId !== 'ClaimId');
                 const total       = tasks.length;
-                const toDo        = tasks.filter(t => t.status === 'To Do');
-                const inProgress  = tasks.filter(t => t.status === 'In Progress');
-                const needsReview = tasks.filter(t => t.status === 'Needs Review');
-                const done        = tasks.filter(t => t.status === 'Done');
+                const toDo        = tasks.filter(t => t.Status === 'To Do');
+                const inProgress  = tasks.filter(t => t.Status === 'In Progress');
+                const needsReview = tasks.filter(t => t.Status === 'Needs Review');
+                const done        = tasks.filter(t => t.Status === 'Done');
                 const open        = [...toDo, ...inProgress, ...needsReview];
 
                 const completionRate = total > 0 ? Math.round((done.length / total) * 100) : 0;
-                const highRemaining  = open.filter(t => t.priority === 'High').length;
-                const stakeOpen      = open.reduce((s,t) => s + t.stake, 0);
-                const stakeDone      = done.reduce((s,t) => s + t.stake, 0);
+                const highRemaining  = open.filter(t => t.Priority === 'High').length;
+                const stakeOpen      = open.reduce((s,t) => s + num(t.AtStake), 0);
+                const stakeDone      = done.reduce((s,t) => s + num(t.AtStake), 0);
 
-                // Update tile
-                set('actionTotal',          total.toLocaleString());
-                set('actionCompletionRate',  completionRate + '%');
-                set('actionToDo',            toDo.length.toLocaleString());
-                set('actionInProgress',      inProgress.length.toLocaleString());
-                set('actionNeedsReview',     needsReview.length.toLocaleString());
-                set('actionDone',            done.length.toLocaleString());
-                set('actionHighRemaining',   highRemaining.toLocaleString());
-                set('actionStakeOpen',       fmt$(stakeOpen));
-                set('actionStakeDone',       fmt$(stakeDone));
+                set('actionTotal',         total.toLocaleString());
+                set('actionCompletionRate', completionRate + '%');
+                set('actionToDo',           toDo.length.toLocaleString());
+                set('actionInProgress',     inProgress.length.toLocaleString());
+                set('actionNeedsReview',    needsReview.length.toLocaleString());
+                set('actionDone',           done.length.toLocaleString());
+                set('actionHighRemaining',  highRemaining.toLocaleString());
+                set('actionStakeOpen',      fmt$(stakeOpen));
+                set('actionStakeDone',      fmt$(stakeDone));
 
-                // Progress bar
                 const bar = document.getElementById('actionProgressBar');
                 if (bar) bar.style.width = completionRate + '%';
 
-                // By task type (open only)
                 const tc = {};
-                open.forEach(t => {
-                    // Extract task type from name or use a default
-                    const type = t.taskType.includes('Secondary Billing') ? 'Secondary Billing' :
-                                 t.taskType.includes('Check Secondary')   ? 'Check Secondary Insurance' :
-                                 'Other';
-                    tc[type] = (tc[type] || 0) + 1;
-                });
+                open.forEach(t => { const type = t.TaskType || 'Unknown'; tc[type] = (tc[type]||0) + 1; });
                 document.getElementById('actionByType').innerHTML =
                     Object.entries(tc).sort((a,b) => b[1]-a[1])
                     .map(([t,c]) => `<div class="action-item">
@@ -638,14 +600,14 @@
                     </div>`).join('') || '<p style="color:#4b5563">No open actions</p>';
 
             } catch (err) {
-                console.error('Notion fetch error:', err);
+                console.error('Action stats error:', err);
                 set('actionTotal', '—');
                 document.getElementById('actionByType').innerHTML =
-                    '<p style="color:#4b5563;font-size:12px;">Could not load Notion data</p>';
+                    '<p style="color:#4b5563;font-size:12px;">Could not load data</p>';
             }
         }
 
-        // ── Load All ─────────────────────────────────────────────────────────────
+        // ── Load All ──────────────────────────────────────────────────────────────
         async function loadAllData() {
             document.getElementById('loadingOverlay').classList.remove('hidden');
             document.getElementById('errorMsg').style.display = 'none';
@@ -668,7 +630,7 @@
             document.getElementById('loadingOverlay').classList.add('hidden');
         }
 
-        // ── Login ────────────────────────────────────────────────────────────────
+        // ── Login ─────────────────────────────────────────────────────────────────
         function checkPassword() {
             if (document.getElementById('passwordInput').value === PASSWORD) {
                 document.getElementById('loginContainer').style.display = 'none';
